@@ -820,9 +820,25 @@ function proceedToCheckout() {
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
+    // Immediately clear preloader if still present
+    const p = document.getElementById('sitePreloader');
+    if (p) {
+      p.classList.add('loaded');
+      p.style.display = 'none';
+      p.style.pointerEvents = 'none';
+    }
+    // Close other modals first
+    document.querySelectorAll('.modal-overlay.open').forEach(m => {
+      if (m.id !== modalId) {
+        m.classList.remove('open');
+        m.style.display = 'none';
+      }
+    });
     modal.classList.add('open');
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+  } else {
+    console.error("Modal not found in DOM:", modalId);
   }
 }
 
@@ -3806,4 +3822,13 @@ function copySupabaseSql() {
     showToast("Select and copy the SQL code manually.", "info");
   });
 }
+
+// Global Window Exports
+window.openAdminModal = openAdminModal;
+window.openSellModal = openSellModal;
+window.openContactModal = openContactModal;
+window.openTermsModal = openTermsModal;
+window.openModal = openModal;
+window.closeModal = closeModal;
+
 
