@@ -3387,7 +3387,7 @@ function copySupabaseSql() {
 }
 
 function switchAdminMainTab(tab) {
-  const tabs = ['inventory', 'access', 'supabase'];
+  const tabs = ['inventory', 'banners', 'access'];
   tabs.forEach(t => {
     const btn = document.getElementById(`tabBtnAdmin${t.charAt(0).toUpperCase() + t.slice(1)}`);
     const pane = document.getElementById(`adminPane${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -3395,7 +3395,7 @@ function switchAdminMainTab(tab) {
     if (pane) pane.classList.toggle('active', t === tab);
   });
   if (tab === 'inventory') renderAdminInventory();
+  if (tab === 'banners') renderAdminBannersList();
   if (tab === 'access') renderSecondaryAdminsList();
-  if (tab === 'supabase') renderSupabaseStatus();
   initLucide();
 }

@@ -18,7 +18,7 @@
   <link rel="icon" type="image/jpeg" href="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/store_logo.jpg">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="styles.css?v=2.6">
+  <link rel="stylesheet" href="styles.css?v=2.7">
 </head>
 <body>
 
@@ -83,6 +83,35 @@
       </div>
     </div>
   </header>
+
+  <!-- 2. HERO BRAND PROMO CAROUSEL (GARENA 3D SLIDER) -->
+  <section class="hero-carousel-section" id="heroCarouselSection">
+    <div class="hero-carousel-wrapper">
+      
+      <!-- Stage containing the 3D slides -->
+      <div class="hero-carousel-stage" id="heroCarouselStage">
+        <!-- Rendered dynamically by app.js from Supabase / Local dataset -->
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="hero-nav-arrow hero-nav-prev" onclick="prevHeroSlide(event)" aria-label="Previous Slide">
+        <i data-lucide="chevron-left" style="width:20px;height:20px;"></i>
+      </button>
+      <button class="hero-nav-arrow hero-nav-next" onclick="nextHeroSlide(event)" aria-label="Next Slide">
+        <i data-lucide="chevron-right" style="width:20px;height:20px;"></i>
+      </button>
+
+      <!-- Carousel Pagination Dots -->
+      <div class="hero-dots-wrap" id="heroDotsWrap"></div>
+
+      <!-- Side Edge Fade Masks -->
+      <div class="hero-side-mask mask-left"></div>
+      <div class="hero-side-mask mask-right"></div>
+    </div>
+  </section>
+
+  <!-- Gold Divider Strip -->
+  <div class="gold-divider-strip"></div>
 
   <!-- MAIN SHOPPING CONTENT AREA -->
   <main class="container">
@@ -681,6 +710,9 @@
           <button type="button" class="admin-main-tab active" id="tabBtnAdminInventory" onclick="switchAdminMainTab('inventory')">
             <i data-lucide="package" style="width:16px;height:16px;"></i> Account Listings &amp; Inventory
           </button>
+          <button type="button" class="admin-main-tab" id="tabBtnAdminBanners" onclick="switchAdminMainTab('banners')">
+            <i data-lucide="image" style="width:16px;height:16px;"></i> Hero Banners &amp; Slider
+          </button>
           <button type="button" class="admin-main-tab" id="tabBtnAdminAccess" onclick="switchAdminMainTab('access')">
             <i data-lucide="shield-check" style="width:16px;height:16px;"></i> Admin Access &amp; Team
           </button>
@@ -1136,7 +1168,140 @@
           </div>
         </div>
 
-        <!-- TAB PANE 2: ADMIN ACCESS & SECURITY CONTROL -->
+        <!-- TAB PANE 2: HERO BANNERS & SLIDER MANAGEMENT -->
+        <div id="adminPaneBanners" class="admin-tab-pane">
+          <!-- Banner Manager Header Banner -->
+          <div style="background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%); color:#fff; border-radius:12px; padding:18px 20px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1px solid #374151;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:46px; height:46px; border-radius:10px; background:rgba(216,26,13,0.15); border:1.5px solid var(--garena-red); display:flex; align-items:center; justify-content:center; color:#ef4444; flex-shrink:0;">
+                <i data-lucide="image" style="width:24px; height:24px;"></i>
+              </div>
+              <div>
+                <h4 style="font-size:1.1rem; font-weight:900; font-family:'Rajdhani',sans-serif; color:#fff; margin:0;">
+                  Hero Carousel &amp; Promo Banner Manager
+                </h4>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+                  Upload custom photos from device/PC, arrange slider sequence, and manage live homepage promotions.
+                </div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button type="button" class="btn-garena-proceed" style="padding:7px 14px; font-size:0.78rem; background:var(--garena-red); border-color:var(--garena-red);" onclick="openAddBannerForm()">
+                <i data-lucide="plus-circle" style="width:15px; height:15px;"></i> Add New Slide / Banner
+              </button>
+              <button type="button" class="btn-reset-filter" style="padding:7px 12px; font-size:0.78rem; background:#1f2937; color:#e5e7eb; border:1px solid #374151;" onclick="resetHeroBannersToDefault()" title="Reset to default banners">
+                <i data-lucide="rotate-ccw" style="width:13px; height:13px;"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Banner Aspect Ratio / Size Recommendations Alert Card -->
+          <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <i data-lucide="sparkles" style="width:20px; height:20px; color:#16a34a; flex-shrink:0;"></i>
+              <div style="font-size:0.8rem; color:#166534;">
+                <strong>Recommended Image Size:</strong> <b>1360 × 370 px</b> (Aspect Ratio ~ 3.7:1) for ultra-sharp HD quality without cropping.
+              </div>
+            </div>
+            <span style="font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:10px;">Retina HD 2X</span>
+          </div>
+
+          <!-- Add / Edit Banner Form (Hidden by default, shown when adding/editing) -->
+          <div id="adminBannerFormWrap" style="display:none; background:#ffffff; border:2px solid #cbd5e1; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 10px 25px rgba(0,0,0,0.08);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #e2e8f0;">
+              <h4 id="adminBannerFormTitle" style="font-size:1.05rem; font-weight:900; color:#0f172a; margin:0; display:flex; align-items:center; gap:8px;">
+                <i data-lucide="plus-circle" style="width:18px; height:18px; color:var(--garena-red);"></i> Add New Hero Banner
+              </h4>
+              <button type="button" class="btn-reset-filter" style="padding:4px 10px; font-size:0.75rem;" onclick="closeBannerForm()">
+                <i data-lucide="x" style="width:13px; height:13px;"></i> Close Form
+              </button>
+            </div>
+
+            <form id="heroBannerForm" onsubmit="handleSaveHeroBanner(event)">
+              <input type="hidden" id="adminBannerEditId" value="">
+              
+              <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:16px; margin-bottom:16px;">
+                <!-- Left: Form inputs -->
+                <div>
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="type" style="width:13px; height:13px; color:var(--garena-red);"></i> Banner Title / Main Heading
+                    </label>
+                    <input type="text" id="adminBannerTitle" class="form-control" placeholder="e.g. NUR STORE - SG Region Verified Accounts" required oninput="updateBannerLivePreview()">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="align-left" style="width:13px; height:13px; color:#64748b;"></i> Subtitle / Promo Tagline
+                    </label>
+                    <input type="text" id="adminBannerSubtitle" class="form-control" placeholder="e.g. 100% Safe Recovery • Instant WhatsApp Delivery" oninput="updateBannerLivePreview()">
+                  </div>
+
+                  <!-- Direct Photo Upload from PC / Phone -->
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; justify-content:space-between;">
+                      <span style="display:flex; align-items:center; gap:6px;">
+                        <i data-lucide="upload" style="width:13px; height:13px; color:var(--garena-red);"></i> Upload Banner Photo (Device / PC)
+                      </span>
+                      <span id="adminBannerFileCount" style="font-size:0.72rem; color:#16a34a; font-weight:700;"></span>
+                    </label>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                      <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:8px; padding:12px; cursor:pointer; transition:all 0.2s ease;">
+                        <i data-lucide="image-plus" style="width:20px; height:20px; color:var(--garena-red);"></i>
+                        <span style="font-size:0.82rem; font-weight:700; color:#334155;">Choose Photo from Computer / Phone</span>
+                        <input type="file" id="adminBannerFileInput" accept="image/*" style="display:none;" onchange="handleBannerFileUpload(this)">
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Or Paste Direct Image URL -->
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="link" style="width:13px; height:13px; color:#64748b;"></i> Or Image File / URL (e.g. hero_banner.png)
+                    </label>
+                    <input type="text" id="adminBannerImageUrl" class="form-control" placeholder="hero_banner.png or https://..." oninput="updateBannerLivePreview()">
+                  </div>
+
+                  <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; font-weight:700; color:#0f172a;">
+                      <input type="checkbox" id="adminBannerActiveCheckbox" checked style="width:16px; height:16px; accent-color:var(--garena-red);">
+                      Active (Display in Slider)
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Right: Live Banner Preview -->
+                <div>
+                  <div class="form-label" style="margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="eye" style="width:13px; height:13px; color:#64748b;"></i> Live Slider Preview
+                  </div>
+                  <div id="adminBannerPreviewBox" style="width:100%; height:130px; border-radius:10px; overflow:hidden; background:#0d0d0d; border:1.5px solid #e2e8f0; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.15); position:relative;">
+                    <img id="adminBannerPreviewImg" src="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/hero_banner.png" alt="Preview" style="width:100%; height:100%; object-fit:cover; display:block;">
+                  </div>
+                  <div style="font-size:0.7rem; color:#64748b; text-align:center; margin-top:6px;">
+                    Preview of how this banner appears in the live slider.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; padding-top:14px; border-top:1px solid #e2e8f0;">
+                <button type="button" class="btn-reset-filter" style="padding:8px 16px;" onclick="closeBannerForm()">Cancel</button>
+                <button type="submit" class="btn-garena-proceed" style="padding:8px 20px; font-size:0.85rem;">
+                  <i data-lucide="check-circle" style="width:16px; height:16px;"></i> Save Banner
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Banners Inventory Grid / List -->
+          <div id="adminBannersListContainer" style="display:grid; grid-template-columns:1fr; gap:12px;">
+            <!-- Populated dynamically by app.js -->
+          </div>
+        </div>
+
+        <!-- TAB PANE 3: ADMIN ACCESS & SECURITY CONTROL -->
         <div id="adminPaneAccess" class="admin-tab-pane">
           <!-- Store Master & Security Overview Banner -->
           <div style="background:#0f172a;color:#fff;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #1e293b;">
@@ -1475,7 +1640,7 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data.js?v=2.6"></script>
-  <script src="app.js?v=2.6"></script>
+  <script src="data.js?v=2.7"></script>
+  <script src="app.js?v=2.7"></script>
 </body>
 </html>
