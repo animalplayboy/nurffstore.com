@@ -1,7 +1,7 @@
 /**
  * Default Inventory Data for Free Fire, CapCut Pro, TikTok & YouTube Channels
  */
-const DATASET_VERSION = "2026.08.27.02";
+const DATASET_VERSION = "2026.08.27.03";
 
 const DEFAULT_ACCOUNTS = [
   // ==================== FREE FIRE ACCOUNTS ====================
@@ -476,7 +476,7 @@ const PAYMENT_METHODS = [
     accountNumber: "200120234765",
     accountName: "W G K G H RATHNAYAKA",
     branch: "Kurunegala Branch",
-    logo: "ntb_logo.png",
+    logo: "https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/ntb_logo.png",
     icon: "landmark"
   },
   {
@@ -484,7 +484,7 @@ const PAYMENT_METHODS = [
     accountNumber: "082200110131937",
     accountName: "W G K G H RATHNAYAKA",
     branch: "Narammala Branch",
-    logo: "peoples_bank_logo.png",
+    logo: "https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/peoples_bank_logo.png",
     icon: "landmark"
   },
   {
@@ -492,7 +492,7 @@ const PAYMENT_METHODS = [
     accountNumber: "Coming Soon",
     accountName: "NUR STORE",
     branch: "Under Upgrade",
-    logo: "ezcash_logo.png",
+    logo: "https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/ezcash_logo.png",
     isComingSoon: true,
     icon: "smartphone"
   }

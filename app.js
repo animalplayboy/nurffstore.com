@@ -344,6 +344,21 @@ function initLucide() {
   }
 }
 
+// Clean corrupted UTF-8 / Mojibake characters into crisp symbols
+function sanitizeEncoding(str) {
+  if (!str || typeof str !== 'string') return str || '';
+  return str
+    .replace(/â€¢/g, '•')
+    .replace(/â€“/g, '–')
+    .replace(/â€"/g, '—')
+    .replace(/â€™/g, "'")
+    .replace(/â€œ/g, '"')
+    .replace(/â€/g, '"')
+    .replace(/\uFFFD/g, '•')
+    .replace(/Â/g, '')
+    .trim();
+}
+
 // Comprehensive URL parser and converter for Google Drive, Tmpfiles, Imgur, and standard image URLs
 function formatDirectImageUrl(url) {
   if (!url || typeof url !== 'string') {
@@ -717,12 +732,12 @@ function renderCatalog() {
             <span class="denom-code-pill">${acc.code}</span>
           </div>
 
-          <h5 class="denom-title" title="${acc.title}">
-            ${acc.title}
+          <h5 class="denom-title" title="${sanitizeEncoding(acc.title)}">
+            ${sanitizeEncoding(acc.title)}
           </h5>
 
           <div class="denom-specs">
-            <span>${specLine}</span>
+            <span>${sanitizeEncoding(specLine)}</span>
           </div>
         </div>
 
@@ -770,7 +785,7 @@ function updateSelectedSummary() {
           <span class="proceed-badge-code">${acc.code}</span>
           ${isSold ? `<span class="badge-sold-out-pill"><i data-lucide="ban" style="width:11px;height:11px;"></i> SOLD OUT</span>` : `<span class="proceed-channel-tag"><i data-lucide="shield-check" style="width:12px;height:12px;"></i> ${appState.selectedPaymentChannel}</span>`}
         </div>
-        <div class="proceed-acc-title" title="${acc.title}">${acc.title}</div>
+        <div class="proceed-acc-title" title="${sanitizeEncoding(acc.title)}">${sanitizeEncoding(acc.title)}</div>
         <div class="proceed-price-box">
           <span class="proceed-price-lbl">${isSold ? 'Status:' : 'Total Payable:'}</span>
           <span class="proceed-price-val" style="${isSold ? 'color:#dc2626;font-size:1.1rem;' : ''}">${isSold ? 'Sold Out' : formatPrice(acc.priceLKR)}</span>
@@ -998,7 +1013,7 @@ function renderDetailModal(acc) {
         </div>
         ${discountPercent && !isSold ? `<span class="det-discount-badge">Save ${discountPercent}%</span>` : ''}
       </div>
-      <h4 class="det-card-title">${acc.title}</h4>
+      <h2 class="det-title">${sanitizeEncoding(acc.title)}</h2>
       <div class="det-price-bottom">
         <div class="det-price-main">
           <span class="det-price-curr">LKR</span>
@@ -2170,25 +2185,51 @@ function adminEditAccount(accId) {
   initLucide();
 }
 
+async function uploadImageToSupabaseStorage(file) {
+  if (!supabaseClient) return null;
+  try {
+    const fileExt = file.name ? file.name.split('.').pop() : 'jpg';
+    const fileName = `item_${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
+    const { error } = await supabaseClient.storage
+      .from('store-assets')
+      .upload(fileName, file, { upsert: true });
+
+    if (error) throw error;
+    const { data: publicData } = supabaseClient.storage
+      .from('store-assets')
+      .getPublicUrl(fileName);
+
+    return publicData ? publicData.publicUrl : null;
+  } catch (e) {
+    console.error("Storage upload error:", e);
+    return null;
+  }
+}
+
 async function handleAdminDirectPhotoUpload(input) {
   const files = Array.from(input.files || []);
   if (files.length === 0) return;
 
   const countEl = document.getElementById('adminPhotoFileCount');
-  if (countEl) countEl.textContent = `Processing ${files.length} photo(s)... ⏳`;
+  if (countEl) countEl.textContent = `Uploading ${files.length} photo(s) to Cloud... ⏳`;
 
   for (const file of files) {
     if (file.type.startsWith('image/')) {
-      const compressedBase64 = await compressImage(file, 1600, 0.85);
-      if (compressedBase64) {
-        adminFormImages.push(compressedBase64);
+      // 1. Try Supabase Storage CDN upload first
+      let cloudUrl = await uploadImageToSupabaseStorage(file);
+      if (cloudUrl) {
+        adminFormImages.push(cloudUrl);
+      } else {
+        // Fallback to local Base64
+        const compressedBase64 = await compressImage(file, 1600, 0.85);
+        if (compressedBase64) adminFormImages.push(compressedBase64);
       }
     }
   }
 
   if (countEl) countEl.textContent = `Attached ${files.length} photo(s)`;
   renderAdminFormImagePreviews();
-  showToast(`Attached ${files.length} photo(s) to listing!`, "success");
+  showToast(`Uploaded ${files.length} photo(s) to Supabase Storage!`, "success");
 }
 
 function renderAdminFormImagePreviews() {
@@ -2790,17 +2831,21 @@ async function handleBannerFileUpload(input) {
   if (!file) return;
 
   const countEl = document.getElementById('adminBannerFileCount');
-  if (countEl) countEl.textContent = 'Processing photo... ⏳';
+  if (countEl) countEl.textContent = 'Uploading to Cloud... ⏳';
 
-  const compressed = await compressImage(file, 1360, 0.85);
-  if (compressed) {
-    adminBannerFormImageBase64 = compressed;
+  let cloudUrl = await uploadImageToSupabaseStorage(file);
+  if (!cloudUrl) {
+    cloudUrl = await compressImage(file, 1360, 0.85);
+  }
+
+  if (cloudUrl) {
+    adminBannerFormImageBase64 = cloudUrl;
     if (countEl) countEl.textContent = `Attached: ${file.name}`;
     
     const previewImg = document.getElementById('adminBannerPreviewImg');
-    if (previewImg) previewImg.src = compressed;
+    if (previewImg) previewImg.src = cloudUrl;
     
-    showToast("Banner photo attached!", "success");
+    showToast("Banner photo uploaded to Supabase Storage!", "success");
   } else {
     if (countEl) countEl.textContent = 'Failed to load file';
     showToast("Could not process image file.", "error");
@@ -2814,13 +2859,18 @@ async function handleDirectPhotoReplace(bannerId, fileInput) {
   const banner = (appState.banners || []).find(b => b.id === bannerId);
   if (!banner) return;
 
-  showToast("Compressing & updating banner photo...", "info");
-  const compressed = await compressImage(file, 1360, 0.85);
-  if (compressed) {
-    banner.image = compressed;
+  showToast("Uploading banner photo to Cloud...", "info");
+  let cloudUrl = await uploadImageToSupabaseStorage(file);
+  if (!cloudUrl) {
+    cloudUrl = await compressImage(file, 1360, 0.85);
+  }
+
+  if (cloudUrl) {
+    banner.image = cloudUrl;
     banner.type = 'image';
     saveHeroBanners();
-    showToast(`Photo replaced for slide: ${banner.title || 'Banner'}!`, "success");
+    syncHeroBannersToSupabase();
+    showToast(`Photo uploaded to Cloud for slide: ${banner.title || 'Banner'}!`, "success");
   } else {
     showToast("Could not update photo.", "error");
   }
@@ -2836,7 +2886,7 @@ function updateBannerLivePreview() {
   } else if (urlInput) {
     previewImg.src = formatDirectImageUrl(urlInput);
   } else {
-    previewImg.src = 'hero_banner.png';
+    previewImg.src = 'https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/hero_banner.png';
   }
 }
 
@@ -2849,7 +2899,7 @@ function handleSaveHeroBanner(e) {
   const urlInput = document.getElementById('adminBannerImageUrl').value.trim();
   const isActive = document.getElementById('adminBannerActiveCheckbox').checked;
 
-  let image = adminBannerFormImageBase64 || urlInput || 'hero_banner.png';
+  let image = adminBannerFormImageBase64 || urlInput || 'https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/hero_banner.png';
 
   if (editId) {
     const idx = (appState.banners || []).findIndex(b => b.id === editId);

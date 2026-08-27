@@ -180,6 +180,7 @@ img {
   letter-spacing: 2.5px;
   background: linear-gradient(135deg, #ffffff 0%, #fbbf24 50%, #f59e0b 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 4px;
   text-transform: uppercase;
@@ -3351,16 +3352,42 @@ footer.site-footer {
    11. ULTRA-PREMIUM MOBILE OPTIMIZATION & RESPONSIVENESS SUITE
    ========================================================= */
 
+/* Universal Mobile Base Tweaks */
+@media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .container {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+
+  /* Prevent Safari / iOS Auto-Zoom on form input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
 /* Mobile Header & Top Navbar */
 @media (max-width: 600px) {
   header.top-navbar {
     height: 52px;
+    padding: 0;
   }
   .navbar-inner {
-    padding: 0 10px;
+    padding: 0 10px !important;
   }
   .garena-brand {
-    gap: 8px;
+    gap: 6px;
   }
   .garena-logo-svg {
     gap: 6px;
@@ -3371,25 +3398,27 @@ footer.site-footer {
     border-radius: 8px;
   }
   .garena-brand-text span:first-child {
-    font-size: 1.12rem !important;
+    font-size: 1.15rem !important;
     letter-spacing: 0.2px !important;
   }
   .brand-pipe, .brand-sub {
     display: none !important;
   }
   .navbar-right {
-    gap: 5px;
+    gap: 4px;
   }
   .curr-pill-btn {
-    padding: 3px 7px;
+    padding: 3px 6px;
     font-size: 0.68rem;
     height: 28px;
+    border-radius: 6px;
   }
   .btn-sell-nav {
-    padding: 4px 10px;
+    padding: 4px 9px;
     font-size: 0.72rem;
     height: 28px;
     gap: 3px;
+    border-radius: 14px;
   }
   .btn-sell-nav span {
     font-size: 0.72rem;
@@ -3397,10 +3426,12 @@ footer.site-footer {
   .user-avatar-btn {
     width: 30px;
     height: 30px;
+    border-radius: 8px;
   }
   .announce-bar {
     font-size: 0.68rem;
-    padding: 5px 8px;
+    padding: 4px 8px;
+    line-height: 1.3;
   }
   .announce-badge {
     font-size: 0.58rem;
@@ -3408,69 +3439,116 @@ footer.site-footer {
   }
 }
 
-/* Mobile Hero 3D Carousel */
+/* Mobile Hero 3D Carousel & Banner */
 @media (max-width: 600px) {
   .hero-carousel-section {
-    padding: 10px 0 8px;
+    padding: 8px 0 6px;
   }
   .hero-carousel-wrapper {
-    height: 148px;
+    height: 152px;
   }
   .hero-slide {
-    width: 90vw;
-    max-width: 380px;
-    height: 142px;
+    width: 92vw;
+    max-width: 390px;
+    height: 146px;
     border-radius: 12px;
   }
+  .hero-slide-img {
+    object-fit: cover;
+  }
+  .hero-discount-slide {
+    padding: 12px;
+  }
+  .discount-hero-title {
+    font-size: 1.25rem !important;
+  }
+  .discount-desc {
+    font-size: 0.68rem !important;
+  }
   .hero-nav-arrow {
-    width: 28px;
-    height: 28px;
-    opacity: 0.9;
+    width: 26px;
+    height: 26px;
+    opacity: 0.85;
   }
   .hero-nav-prev { left: 4px; }
   .hero-nav-next { right: 4px; }
-  .hero-side-mask { width: 8vw; }
+  .hero-side-mask { width: 6vw; }
 }
 
-/* Mobile Game 4-Category Tile Grid */
+/* Mobile 4-Category Tile Grid */
 @media (max-width: 600px) {
   .game-select-section {
-    padding: 12px 0 8px;
+    padding: 10px 0 6px;
   }
   .game-select-title {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     margin-bottom: 8px;
   }
   .game-icons-grid {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 5px;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
   }
   .game-item-tile {
-    padding: 6px 3px 5px;
-    border-radius: 8px;
+    padding: 6px 3px 6px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
   }
-  .game-item-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 8px;
-    margin-bottom: 3px;
+  .game-item-tile.active {
+    border-color: #d81a0d;
+    background: #fff5f5;
+    box-shadow: 0 4px 12px rgba(216, 26, 13, 0.15);
+  }
+  .game-app-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 4px;
+    position: relative;
+  }
+  .modern-game-icon {
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 10px !important;
+    overflow: hidden;
   }
   .game-item-name {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 800;
     line-height: 1.15;
+    color: #0f172a;
   }
   .game-hot-tag {
     font-size: 0.5rem;
-    padding: 1px 3px;
-    top: -5px;
-    right: 1px;
+    padding: 1px 4px;
+    top: -4px;
+    right: -2px;
     border-radius: 3px;
   }
-  .game-badge-count {
-    font-size: 0.52rem;
-    padding: 1px 4px;
-    margin-top: 2px;
+  .game-item-count {
+    font-size: 0.58rem !important;
+    padding: 1px 4px !important;
+    margin-top: 2px !important;
+    border-radius: 8px !important;
+  }
+}
+
+/* Mobile Selected Game Header */
+@media (max-width: 600px) {
+  .selected-game-banner {
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+  }
+  .sel-game-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+  .sel-game-text h3 {
+    font-size: 0.95rem;
+  }
+  .sel-game-badge {
+    font-size: 0.68rem;
   }
 }
 
@@ -3478,33 +3556,24 @@ footer.site-footer {
 @media (max-width: 600px) {
   .main-shop-card {
     border-radius: 12px;
-    padding: 12px 10px;
-    margin-bottom: 16px;
+    padding: 10px 8px;
+    margin-bottom: 14px;
   }
   .step-block {
-    margin-bottom: 16px;
-    padding-bottom: 16px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
   }
   .step-header {
-    margin-bottom: 10px;
-    gap: 8px;
-  }
-  .step-circle-num {
-    width: 22px;
-    height: 22px;
-    font-size: 0.72rem;
-  }
-  .step-header h4 {
-    font-size: 0.92rem;
-  }
-  .login-input-row {
-    flex-direction: column;
+    margin-bottom: 8px;
     gap: 6px;
   }
-  .login-input-wrap input {
-    height: 38px;
-    font-size: 0.8rem;
-    padding: 6px 12px 6px 34px;
+  .step-circle-num {
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+  .step-header h4 {
+    font-size: 0.88rem;
   }
   .denom-filter-tabs {
     display: flex;
@@ -3515,71 +3584,91 @@ footer.site-footer {
     scrollbar-width: none;
     padding-bottom: 4px;
     gap: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
   .denom-filter-tabs::-webkit-scrollbar {
     display: none;
   }
   .denom-tab {
-    padding: 4px 10px;
-    font-size: 0.7rem;
+    padding: 5px 11px;
+    font-size: 0.72rem;
+    font-weight: 700;
     flex-shrink: 0;
+    border-radius: 16px;
   }
 }
 
 /* Mobile Product Cards (Crisp 2-Column Responsive Grid) */
-@media (max-width: 560px) {
+@media (max-width: 600px) {
   .denominations-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 7px;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
   .denom-card {
-    padding: 7px;
-    border-radius: 8px;
-    border-width: 1px;
+    padding: 8px !important;
+    border-radius: 10px !important;
+    border-width: 1px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .denom-card:active {
+    transform: scale(0.98);
   }
   .denom-card-img {
-    margin-bottom: 5px;
-    border-radius: 5px;
-    aspect-ratio: 16/10;
+    margin-bottom: 6px !important;
+    border-radius: 6px !important;
+    aspect-ratio: 16/10 !important;
+    overflow: hidden;
   }
   .denom-tag-pill {
-    font-size: 0.5rem;
-    padding: 1px 4px;
-    top: 3px;
-    left: 3px;
-    border-radius: 3px;
+    font-size: 0.52rem !important;
+    padding: 2px 5px !important;
+    top: 4px !important;
+    left: 4px !important;
+    border-radius: 4px !important;
+    font-weight: 800 !important;
   }
   .denom-code-pill {
-    font-size: 0.5rem;
-    padding: 1px 4px;
-    bottom: 3px;
-    right: 3px;
-    border-radius: 3px;
+    font-size: 0.52rem !important;
+    padding: 2px 5px !important;
+    bottom: 4px !important;
+    right: 4px !important;
+    border-radius: 4px !important;
   }
   .denom-title {
-    font-size: 0.74rem;
-    margin-bottom: 3px;
-    height: 2.3em;
-    line-height: 1.18;
+    font-size: 0.78rem !important;
+    margin-bottom: 4px !important;
+    height: 2.4em !important;
+    line-height: 1.2 !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
   }
   .denom-specs {
-    font-size: 0.62rem;
-    margin-bottom: 5px;
-    gap: 2px;
+    font-size: 0.64rem !important;
+    margin-bottom: 6px !important;
+    gap: 3px !important;
   }
   .denom-price-row {
-    padding-top: 5px;
+    padding-top: 6px !important;
+    border-top: 1px solid #f1f5f9;
   }
   .denom-price-main {
-    font-size: 1.05rem;
+    font-size: 1.1rem !important;
+    font-weight: 900 !important;
   }
   .denom-price-orig {
-    font-size: 0.6rem;
+    font-size: 0.65rem !important;
   }
   .badge-prime-vip, .prime-level-badge {
-    font-size: 0.55rem;
-    padding: 1px 4px;
+    font-size: 0.58rem !important;
+    padding: 1px 5px !important;
   }
 }
 
@@ -3593,8 +3682,8 @@ footer.site-footer {
     border-radius: 8px;
   }
   .channel-logo-box {
-    width: 42px;
-    height: 28px;
+    width: 40px;
+    height: 26px;
   }
   .channel-name {
     font-size: 0.78rem;
@@ -3607,28 +3696,52 @@ footer.site-footer {
     font-size: 0.65rem;
   }
   .btn-buy-garena {
-    height: 46px;
-    font-size: 0.92rem;
+    height: 44px;
+    font-size: 0.9rem;
     border-radius: 10px;
   }
 }
 
-/* Mobile Modals (Bottom Sheet on Phones) */
+/* Mobile Modals (Luxury Bottom Sheet on Phones) */
 @media (max-width: 640px) {
   .modal-overlay {
-    padding: 6px;
-    align-items: flex-end;
+    padding: 0 !important;
+    align-items: flex-end !important;
+    background: rgba(15, 23, 42, 0.75) !important;
+    backdrop-filter: blur(4px) !important;
   }
   .modal-box {
     width: 100% !important;
     max-width: 100% !important;
-    border-radius: 16px 16px 0 0 !important;
+    border-radius: 20px 20px 0 0 !important;
     max-height: 92vh !important;
     margin: 0 !important;
-    padding: 16px 12px 20px !important;
+    padding: 18px 14px 24px !important;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.35) !important;
+    animation: slideUpMobile 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
+  
+  @keyframes slideUpMobile {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .modal-box::before {
+    content: '';
+    display: block;
+    width: 38px;
+    height: 4px;
+    background: #cbd5e1;
+    border-radius: 3px;
+    margin: 0 auto 12px;
+  }
+
   .modal-header {
-    padding-bottom: 10px;
+    padding-bottom: 8px;
     margin-bottom: 10px;
   }
   .modal-header h3 {
@@ -3639,35 +3752,43 @@ footer.site-footer {
     gap: 10px !important;
   }
   .det-gallery-main {
-    max-height: 200px !important;
+    max-height: 220px !important;
+    border-radius: 10px !important;
   }
   .det-specs-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 5px !important;
+    gap: 6px !important;
   }
   .det-spec-card {
-    padding: 5px 7px !important;
+    padding: 6px 8px !important;
+    border-radius: 8px !important;
   }
   .det-spec-label {
     font-size: 0.62rem !important;
   }
   .det-spec-val {
-    font-size: 0.78rem !important;
+    font-size: 0.8rem !important;
   }
   .modal-actions-wrap {
     flex-direction: column !important;
     gap: 8px !important;
     margin-top: 12px !important;
+    position: sticky;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 8px 0 2px;
   }
   .btn-modal-wa, .btn-modal-bank {
     width: 100% !important;
-    height: 42px !important;
-    font-size: 0.85rem !important;
+    height: 44px !important;
+    font-size: 0.88rem !important;
     justify-content: center !important;
+    border-radius: 10px !important;
   }
   .sell-cat-grid {
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 5px !important;
+    gap: 6px !important;
   }
   .admin-kpi-grid {
     grid-template-columns: repeat(2, 1fr) !important;
@@ -3675,41 +3796,43 @@ footer.site-footer {
   }
   .admin-kpi-card {
     padding: 8px 10px !important;
+    border-radius: 8px !important;
   }
   .admin-kpi-val {
-    font-size: 1.2rem !important;
+    font-size: 1.15rem !important;
   }
 }
 
 /* Mobile Floating Widgets & Footer */
 @media (max-width: 600px) {
   .chat-toggle-btn {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
     bottom: 14px;
     right: 12px;
+    box-shadow: 0 4px 14px rgba(216, 26, 13, 0.4);
   }
   .chat-window {
     width: calc(100vw - 16px) !important;
     left: 8px !important;
     right: 8px !important;
-    bottom: 68px !important;
-    height: min(440px, 75vh) !important;
+    bottom: 66px !important;
+    height: min(460px, 78vh) !important;
     border-radius: 14px !important;
   }
   .site-footer {
-    padding: 24px 0 18px;
+    padding: 22px 0 16px;
   }
   .footer-main-grid {
     grid-template-columns: 1fr !important;
-    gap: 20px !important;
+    gap: 18px !important;
   }
   .hiw-steps-grid {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
   }
   .hiw-step-card {
-    padding: 14px !important;
+    padding: 12px !important;
   }
 }
 
