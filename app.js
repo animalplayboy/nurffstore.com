@@ -2954,14 +2954,23 @@ function deleteHeroBanner(bannerId) {
 
   showConfirmDialog({
     title: `Delete this slide?`,
-    desc: `Are you sure you want to remove "${cleanTitle}" from the slider?`,
+    desc: `Are you sure you want to permanently remove "${cleanTitle}" from the slider and cloud database?`,
     icon: 'trash-2',
     confirmBtnText: 'Delete Banner',
     btnColor: '#dc2626',
-    onConfirm: () => {
+    onConfirm: async () => {
       appState.banners = (appState.banners || []).filter(b => b.id !== bannerId);
       saveHeroBanners();
-      showToast("Banner deleted from slider.", "info");
+      if (supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from('hero_banners').delete().eq('id', bannerId);
+          if (error) console.error("Supabase delete banner error:", error);
+          else console.log(`🗑️ Deleted banner ${bannerId} from Supabase Cloud`);
+        } catch (e) {
+          console.error("Supabase delete banner error:", e);
+        }
+      }
+      showToast("Banner deleted permanently from Cloud & Local.", "info");
     }
   });
 }
@@ -2979,6 +2988,7 @@ function moveHeroBanner(bannerId, direction) {
   list[targetIdx] = temp;
 
   saveHeroBanners();
+  syncHeroBannersToSupabase();
   showToast("Slide order updated!", "info");
 }
 
@@ -2988,6 +2998,7 @@ function toggleHeroBannerActive(bannerId) {
 
   banner.active = banner.active === false ? true : false;
   saveHeroBanners();
+  syncHeroBannersToSupabase();
   showToast(banner.active ? "Slide enabled on homepage!" : "Slide hidden from homepage.", "info");
 }
 
@@ -3155,16 +3166,17 @@ async function fetchHeroBannersFromSupabase() {
   if (!supabaseClient) return;
   try {
     const { data, error } = await supabaseClient.from('hero_banners').select('*').order('sort_order', { ascending: true });
-    if (!error && data && data.length > 0) {
+    if (!error && data) {
       appState.banners = data.map(row => ({
         id: row.id,
-        title: row.title,
-        subtitle: row.subtitle,
-        description: row.description,
-        image: row.image,
+        title: sanitizeEncoding(row.title || ''),
+        subtitle: sanitizeEncoding(row.subtitle || ''),
+        description: sanitizeEncoding(row.description || ''),
+        image: row.image || '',
         type: row.type || 'image',
         active: row.active !== false
       }));
+      localStorage.setItem('nexus_hero_banners', JSON.stringify(appState.banners));
       renderHeroCarousel();
       renderAdminBannersList();
     }
