@@ -18,7 +18,7 @@
   <link rel="icon" type="image/jpeg" href="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/store_logo.jpg">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="styles.css?v=3.4">
+  <link rel="stylesheet" href="styles.css?v=3.5">
 </head>
 <body>
 
@@ -72,13 +72,13 @@
 
         <!-- Sell Portal -->
         <button class="btn-sell-nav" onclick="openSellModal()">
-          <i data-lucide="dollar-sign" style="width:13px;height:13px;"></i>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:#16a34a;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <span>Sell Account</span>
         </button>
 
         <!-- Admin Profile Icon -->
-        <button class="user-avatar-btn" onclick="openAdminModal()" title="Store Admin Dashboard">
-          <i data-lucide="user" style="width:18px;height:18px;"></i>
+        <button class="user-avatar-btn" id="navAdminBtn" onclick="openAdminModal()" title="Store Admin Dashboard" aria-label="Admin Dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:#d81a0d;"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         </button>
       </div>
     </div>
@@ -1701,18 +1701,7 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data.js?v=3.4"></script>
-  <script src="app.js?v=3.4"></script>
-
-  <!-- Universal Preloader Failsafe Dismiss -->
-  <script>
-    setTimeout(function() {
-      var p = document.getElementById('sitePreloader');
-      if (p && !p.classList.contains('loaded')) {
-        p.classList.add('loaded');
-        setTimeout(function() { p.style.display = 'none'; }, 350);
-      }
-    }, 600);
-  </script>
+  <script src="data.js?v=3.5"></script>
+  <script src="app.js?v=3.5"></script>
 </body>
 </html>

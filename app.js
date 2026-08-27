@@ -48,19 +48,45 @@ function initPreloader() {
   const status = document.getElementById('preloaderStatusText');
   if (!preloader) return;
 
-  if (bar) bar.style.width = '65%';
-  if (status) status.textContent = "Loading NUR STORE...";
+  const messages = [
+    "Connecting to Secure Server...",
+    "Verifying Garena Database...",
+    "Synchronizing Live Accounts...",
+    "Welcome to NUR STORE!"
+  ];
 
-  setTimeout(() => {
+  let currentPercent = 15;
+  let msgStep = 0;
+
+  if (bar) bar.style.width = '15%';
+  if (status) status.textContent = messages[0];
+
+  const animTimer = setInterval(() => {
+    currentPercent += Math.floor(Math.random() * 20) + 14;
+    if (currentPercent > 95) currentPercent = 95;
+
+    if (bar) bar.style.width = currentPercent + '%';
+
+    if (status && currentPercent > (msgStep + 1) * 26 && msgStep < messages.length - 1) {
+      msgStep++;
+      status.textContent = messages[msgStep];
+    }
+  }, 130);
+
+  const finishPreloader = () => {
+    clearInterval(animTimer);
     if (bar) bar.style.width = '100%';
     if (status) status.textContent = "Welcome to NUR STORE!";
+
     setTimeout(() => {
       preloader.classList.add('loaded');
       setTimeout(() => {
         preloader.style.display = 'none';
-      }, 350);
-    }, 200);
-  }, 300);
+      }, 550);
+    }, 280);
+  };
+
+  setTimeout(finishPreloader, 1100);
 }
 
 // =========================================================
@@ -791,6 +817,7 @@ function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.add('open');
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
   }
 }
@@ -799,6 +826,7 @@ function closeModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.remove('open');
+    modal.style.display = 'none';
     document.body.style.overflow = '';
   }
 }
@@ -1451,6 +1479,9 @@ function openAdminModal() {
     if (emailInput) emailInput.value = '';
     if (pinInput) pinInput.value = '';
     openModal('adminAuthModal');
+    setTimeout(() => {
+      if (pinInput) pinInput.focus();
+    }, 150);
     initLucide();
     return;
   }
