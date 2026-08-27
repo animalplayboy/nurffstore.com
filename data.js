@@ -1,6 +1,8 @@
 /**
- * Default Inventory Data for Free Fire, CapCut Pro, and TikTok Accounts
+ * Default Inventory Data for Free Fire, CapCut Pro, TikTok & YouTube Channels
  */
+const DATASET_VERSION = "2026.08.27.02";
+
 const DEFAULT_ACCOUNTS = [
   // ==================== FREE FIRE ACCOUNTS ====================
   {

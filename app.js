@@ -370,50 +370,31 @@ function formatDirectImageUrl(url) {
   return clean;
 }
 
-// Load Inventory from LocalStorage or default dataset
+// Load Inventory from LocalStorage or default dataset with Version Sync
 function loadInventory() {
+  const currentVer = typeof DATASET_VERSION !== 'undefined' ? DATASET_VERSION : 'v1.0';
+  const savedVer = localStorage.getItem('nexus_dataset_version');
   const saved = localStorage.getItem('nexus_inventory');
-  if (saved) {
+
+  // If saved in same version session, load saved; if dataset updated in data.js, load fresh data.js!
+  if (saved && savedVer === currentVer) {
     try {
       appState.accounts = JSON.parse(saved);
-      // Auto-sanitize titles and modernize codes to 001 series
       appState.accounts.forEach(acc => {
         if (acc.title) {
           acc.title = acc.title.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\s]+/u, '').trim();
         }
-        // Modernize legacy codes (FF-101 -> FF-001, CC-201 -> CC-001, TT-301 -> TT-001)
-        if (acc.code) {
-          if (acc.code === 'FF-101') acc.code = 'FF-001';
-          else if (acc.code === 'FF-102') acc.code = 'FF-002';
-          else if (acc.code === 'FF-103') acc.code = 'FF-003';
-          else if (acc.code === 'FF-104') acc.code = 'FF-004';
-          else if (acc.code === 'CC-201') acc.code = 'CC-001';
-          else if (acc.code === 'CC-202') acc.code = 'CC-002';
-          else if (acc.code === 'CC-203') acc.code = 'CC-003';
-          else if (acc.code === 'TT-301') acc.code = 'TT-001';
-          else if (acc.code === 'TT-302') acc.code = 'TT-002';
-          else if (acc.code === 'TT-303') acc.code = 'TT-003';
-        }
-        if (acc.id) {
-          if (acc.id === 'FF-101') acc.id = 'FF-001';
-          else if (acc.id === 'FF-102') acc.id = 'FF-002';
-          else if (acc.id === 'FF-103') acc.id = 'FF-003';
-          else if (acc.id === 'FF-104') acc.id = 'FF-004';
-          else if (acc.id === 'CC-201') acc.id = 'CC-001';
-          else if (acc.id === 'CC-202') acc.id = 'CC-002';
-          else if (acc.id === 'CC-203') acc.id = 'CC-003';
-          else if (acc.id === 'TT-301') acc.id = 'TT-001';
-          else if (acc.id === 'TT-302') acc.id = 'TT-002';
-          else if (acc.id === 'TT-303') acc.id = 'TT-003';
-        }
       });
-
       saveInventory();
     } catch (e) {
       appState.accounts = [...DEFAULT_ACCOUNTS];
+      localStorage.setItem('nexus_dataset_version', currentVer);
+      saveInventory();
     }
   } else {
+    // New GitHub deployment or updated data.js -> automatically sync with DEFAULT_ACCOUNTS
     appState.accounts = [...DEFAULT_ACCOUNTS];
+    localStorage.setItem('nexus_dataset_version', currentVer);
     saveInventory();
   }
 
