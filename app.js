@@ -326,8 +326,12 @@ function startHeroSlideTimer() {
 }
 
 function initLucide() {
-  if (window.lucide) {
-    window.lucide.createIcons();
+  try {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
+  } catch (e) {
+    // Fail gracefully
   }
 }
 
