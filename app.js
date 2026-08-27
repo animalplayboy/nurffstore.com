@@ -37,6 +37,17 @@ document.addEventListener('DOMContentLoaded', () => {
   try { initHeroCarousel(); } catch (e) { console.error("Hero carousel init error:", e); }
   try { initLucide(); } catch (e) { console.error("Lucide init error:", e); }
   try { initSupabase(); } catch (e) { console.error("Supabase init error:", e); }
+
+  // Handle shared account URL parameter
+  setTimeout(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const sharedAccountId = urlParams.get('account');
+    if (sharedAccountId) {
+      openDetailModal(sharedAccountId);
+      // Clean up URL visually so it doesn't stay in address bar
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, 100);
 });
 
 // =========================================================
@@ -1049,6 +1060,10 @@ function renderDetailModal(acc) {
           <span>Bank Transfer Checkout</span>
         </button>
       `}
+      <button class="btn-modal-share" onclick="shareAccount('${acc.id}')" style="grid-column:1/-1; background:#f1f5f9; color:#0f172a; border:1px solid #cbd5e1; padding:12px; border-radius:8px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all 0.2s ease;" onmouseover="this.style.background='#e2e8f0';" onmouseout="this.style.background='#f1f5f9';">
+        <i data-lucide="share-2" style="width:18px;height:18px;color:#3b82f6;"></i>
+        <span>Share This Product</span>
+      </button>
     </div>
   `;
 
@@ -1294,6 +1309,32 @@ function orderOnWhatsApp(accountId) {
 
   const waUrl = `https://wa.me/${STORE_CONFIG.whatsappNumber}?text=${encodeURIComponent(message)}`;
   window.open(waUrl, '_blank');
+}
+
+function shareAccount(accountId) {
+  const acc = appState.accounts.find(a => a.id === accountId);
+  if (!acc) return;
+
+  const shareUrl = `${window.location.origin}${window.location.pathname}?account=${accountId}`;
+  const shareTitle = `Buy ${acc.title} | NUR STORE`;
+  const shareText = `Check out this ${acc.category.toUpperCase()} account at NUR STORE! Only LKR ${acc.priceLKR.toLocaleString()}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: shareTitle,
+      text: shareText,
+      url: shareUrl
+    }).catch((err) => {
+      console.warn("Share failed:", err);
+    });
+  } else {
+    // Fallback: Copy to clipboard
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      showToast("Link copied to clipboard! Share it with your friends.", "success");
+    }).catch(() => {
+      showToast("Could not copy link automatically.", "error");
+    });
+  }
 }
 
 // 3. Sell Your Account Modal
@@ -3775,5 +3816,6 @@ window.openContactModal = openContactModal;
 window.openTermsModal = openTermsModal;
 window.openModal = openModal;
 window.closeModal = closeModal;
+window.shareAccount = shareAccount;
 
 
