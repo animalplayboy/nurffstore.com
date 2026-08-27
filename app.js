@@ -24,6 +24,7 @@ let appState = {
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
+  initPreloader();
   loadInventory();
   loadHeroBanners();
   initBankList();
@@ -33,6 +34,56 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroCarousel();
   initLucide();
 });
+
+// =========================================================
+// 0. Luxury Gaming Preloader & Splash Screen Controller
+// =========================================================
+function initPreloader() {
+  const preloader = document.getElementById('sitePreloader');
+  const bar = document.getElementById('preloaderProgressBar');
+  const status = document.getElementById('preloaderStatusText');
+  if (!preloader) return;
+
+  let progress = 15;
+  const statusMessages = [
+    "Connecting to Secure Server...",
+    "Loading Verified Accounts...",
+    "Synchronizing Inventory...",
+    "Welcome to NUR STORE!"
+  ];
+  let msgIdx = 0;
+
+  const interval = setInterval(() => {
+    progress += Math.floor(Math.random() * 25) + 15;
+    if (progress > 92) progress = 92;
+
+    if (bar) bar.style.width = `${progress}%`;
+    if (status && msgIdx < statusMessages.length) {
+      status.textContent = statusMessages[msgIdx];
+      msgIdx++;
+    }
+  }, 110);
+
+  const completeLoading = () => {
+    clearInterval(interval);
+    if (bar) bar.style.width = '100%';
+    if (status) status.textContent = "Welcome to NUR STORE!";
+
+    setTimeout(() => {
+      preloader.classList.add('loaded');
+      setTimeout(() => {
+        preloader.style.display = 'none';
+      }, 500);
+    }, 300);
+  };
+
+  if (document.readyState === 'complete') {
+    completeLoading();
+  } else {
+    window.addEventListener('load', completeLoading);
+    setTimeout(completeLoading, 1600);
+  }
+}
 
 // =========================================================
 // Garena 3D Hero Carousel System (Dynamic State-Driven)
@@ -2418,6 +2469,35 @@ function executeConfirmAction() {
     cb();
   }
   closeModal('customConfirmModal');
+}
+
+// 1-Click Export updated dataset to data.js for seamless Cloudflare hosting
+function exportUpdatedDataJs() {
+  const accountsToExport = appState.accounts && appState.accounts.length > 0 ? appState.accounts : DEFAULT_ACCOUNTS;
+  
+  const content = `// NUR STORE - LIVE INVENTORY & CONFIG DATASET
+// Exported directly from NUR STORE Admin Dashboard on ${new Date().toLocaleString()}
+
+const DEFAULT_ACCOUNTS = ${JSON.stringify(accountsToExport, null, 2)};
+
+// Official Payment Channels Config
+const PAYMENT_METHODS = ${JSON.stringify(PAYMENT_METHODS, null, 2)};
+
+// Store Contact details
+const STORE_CONFIG = ${JSON.stringify(STORE_CONFIG, null, 2)};
+`;
+
+  const blob = new Blob([content], { type: 'text/javascript;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'data.js';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast("Updated data.js exported! Replace it in your FF STORE folder.", "success");
 }
 
 function adminDeleteAccount(accId) {

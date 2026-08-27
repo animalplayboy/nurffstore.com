@@ -22,6 +22,24 @@
 </head>
 <body>
 
+  <!-- LUXURY GAMING PRELOADER & SPLASH SCREEN -->
+  <div id="sitePreloader" class="site-preloader">
+    <div class="preloader-content">
+      <div class="preloader-logo-ring">
+        <div class="preloader-orbit-ring"></div>
+        <img src="store_logo.jpg" alt="NUR STORE" class="preloader-logo-img">
+      </div>
+      <h1 class="preloader-title">NUR STORE</h1>
+      <p class="preloader-subtitle">SG REGION OFFICIAL MARKETPLACE</p>
+      
+      <!-- Progress Bar & Status Indicator -->
+      <div class="preloader-progress-wrap">
+        <div class="preloader-progress-bar" id="preloaderProgressBar"></div>
+      </div>
+      <div class="preloader-status" id="preloaderStatusText">Connecting to Secure Server...</div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="toast-container"></div>
 
@@ -786,6 +804,9 @@
             </div>
 
             <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" class="btn-reset-filter" style="padding:7px 12px;font-size:0.78rem;color:#2563eb;background:#eff6ff;border-color:#bfdbfe;display:inline-flex;align-items:center;gap:5px;" onclick="exportUpdatedDataJs()" title="Export data.js for Cloudflare deployment">
+                <i data-lucide="download" style="width:14px;height:14px;"></i> Export data.js
+              </button>
               <button class="btn-garena-proceed" style="padding:7px 14px;font-size:0.78rem;" onclick="toggleAddNewAccountForm()">
                 <i data-lucide="plus-circle" style="width:15px;height:15px;"></i> Add Listing
               </button>
