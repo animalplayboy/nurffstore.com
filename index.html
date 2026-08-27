@@ -18,7 +18,7 @@
   <link rel="icon" type="image/jpeg" href="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/store_logo.jpg">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="styles.css?v=3.2">
+  <link rel="stylesheet" href="styles.css?v=3.3">
 </head>
 <body>
 
@@ -1701,7 +1701,18 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data.js?v=3.2"></script>
-  <script src="app.js?v=3.2"></script>
+  <script src="data.js?v=3.3"></script>
+  <script src="app.js?v=3.3"></script>
+
+  <!-- Universal Preloader Failsafe Dismiss -->
+  <script>
+    setTimeout(function() {
+      var p = document.getElementById('sitePreloader');
+      if (p && !p.classList.contains('loaded')) {
+        p.classList.add('loaded');
+        setTimeout(function() { p.style.display = 'none'; }, 350);
+      }
+    }, 600);
+  </script>
 </body>
 </html>

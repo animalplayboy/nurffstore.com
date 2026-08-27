@@ -26,17 +26,17 @@ let appState = {
 
 // Initialize Application
 document.addEventListener('DOMContentLoaded', () => {
-  initPreloader();
-  loadInventory();
-  loadHeroBanners();
-  loadSupportMessages();
-  initBankList();
-  renderCatalog();
-  updateGameBadgeCounts();
-  renderHeroCarousel();
-  initHeroCarousel();
-  initLucide();
-  initSupabase();
+  try { initPreloader(); } catch (e) { console.error("Preloader error:", e); }
+  try { loadInventory(); } catch (e) { console.error("Inventory error:", e); }
+  try { loadHeroBanners(); } catch (e) { console.error("Hero banners error:", e); }
+  try { loadSupportMessages(); } catch (e) { console.error("Support messages error:", e); }
+  try { initBankList(); } catch (e) { console.error("Bank list error:", e); }
+  try { renderCatalog(); } catch (e) { console.error("Catalog error:", e); }
+  try { updateGameBadgeCounts(); } catch (e) { console.error("Game badge error:", e); }
+  try { renderHeroCarousel(); } catch (e) { console.error("Hero carousel error:", e); }
+  try { initHeroCarousel(); } catch (e) { console.error("Hero carousel init error:", e); }
+  try { initLucide(); } catch (e) { console.error("Lucide init error:", e); }
+  try { initSupabase(); } catch (e) { console.error("Supabase init error:", e); }
 });
 
 // =========================================================
@@ -48,45 +48,19 @@ function initPreloader() {
   const status = document.getElementById('preloaderStatusText');
   if (!preloader) return;
 
-  let progress = 15;
-  const statusMessages = [
-    "Connecting to Secure Server...",
-    "Loading Verified Accounts...",
-    "Synchronizing Inventory...",
-    "Welcome to NUR STORE!"
-  ];
-  let msgIdx = 0;
+  if (bar) bar.style.width = '65%';
+  if (status) status.textContent = "Loading NUR STORE...";
 
-  const interval = setInterval(() => {
-    progress += Math.floor(Math.random() * 25) + 15;
-    if (progress > 92) progress = 92;
-
-    if (bar) bar.style.width = `${progress}%`;
-    if (status && msgIdx < statusMessages.length) {
-      status.textContent = statusMessages[msgIdx];
-      msgIdx++;
-    }
-  }, 110);
-
-  const completeLoading = () => {
-    clearInterval(interval);
+  setTimeout(() => {
     if (bar) bar.style.width = '100%';
     if (status) status.textContent = "Welcome to NUR STORE!";
-
     setTimeout(() => {
       preloader.classList.add('loaded');
       setTimeout(() => {
         preloader.style.display = 'none';
-      }, 500);
-    }, 300);
-  };
-
-  if (document.readyState === 'complete') {
-    completeLoading();
-  } else {
-    window.addEventListener('load', completeLoading);
-    setTimeout(completeLoading, 1600);
-  }
+      }, 350);
+    }, 200);
+  }, 300);
 }
 
 // =========================================================
