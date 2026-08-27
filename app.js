@@ -3406,61 +3406,6 @@ function resetHeroBannersToDefault() {
 
 let supabaseClient = null;
 
-const SUPABASE_DEFAULT_SQL = `-- 1. Create accounts table
-CREATE TABLE IF NOT EXISTS public.accounts (
-  id TEXT PRIMARY KEY,
-  category TEXT NOT NULL DEFAULT 'freefire',
-  title TEXT NOT NULL,
-  code TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'available',
-  is_grand_prize BOOLEAN DEFAULT false,
-  is_featured BOOLEAN DEFAULT false,
-  price_lkr NUMERIC NOT NULL,
-  orig_price_lkr NUMERIC,
-  images JSONB DEFAULT '[]'::jsonb,
-  stats JSONB DEFAULT '{}'::jsonb,
-  evo_list JSONB DEFAULT '[]'::jsonb,
-  description TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 2. Create hero_banners table
-CREATE TABLE IF NOT EXISTS public.hero_banners (
-  id TEXT PRIMARY KEY,
-  title TEXT,
-  subtitle TEXT,
-  description TEXT,
-  image TEXT,
-  type TEXT DEFAULT 'image',
-  active BOOLEAN DEFAULT true,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 3. Enable RLS & Policies safely
-ALTER TABLE public.accounts ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.hero_banners ENABLE ROW LEVEL SECURITY;
-
-DROP POLICY IF EXISTS "Allow public read accounts" ON public.accounts;
-DROP POLICY IF EXISTS "Allow public all accounts" ON public.accounts;
-DROP POLICY IF EXISTS "Allow public read banners" ON public.hero_banners;
-DROP POLICY IF EXISTS "Allow public all banners" ON public.hero_banners;
-
-CREATE POLICY "Allow public all accounts" ON public.accounts FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Allow public all banners" ON public.hero_banners FOR ALL USING (true) WITH CHECK (true);
-
--- 4. Enable Realtime
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'accounts') THEN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.accounts;
-  END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'hero_banners') THEN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.hero_banners;
-  END IF;
-END $$;`;
-
 function getSupabaseCredentials() {
   const localUrl = localStorage.getItem('nur_supabase_url');
   const localKey = localStorage.getItem('nur_supabase_key');
