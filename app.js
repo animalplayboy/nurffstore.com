@@ -2642,15 +2642,60 @@ function showToast(msg, type = "info") {
   const container = document.getElementById('toastContainer');
   if (!container) return;
 
+  const validTypes = ['success', 'error', 'info', 'warning'];
+  const safeType = validTypes.includes(type) ? type : 'info';
+
+  const icons = {
+    success: 'check-circle-2',
+    error: 'alert-circle',
+    warning: 'alert-triangle',
+    info: 'sparkles'
+  };
+
+  const titles = {
+    success: 'Success',
+    error: 'Notice',
+    warning: 'Warning',
+    info: 'Store Notice'
+  };
+
   const toast = document.createElement('div');
-  toast.className = `toast ${type === 'success' ? 'toast-success' : ''}`;
-  toast.textContent = msg;
+  toast.className = `toast toast-${safeType}`;
+  toast.innerHTML = `
+    <div class="toast-icon-wrap">
+      <i data-lucide="${icons[safeType]}"></i>
+    </div>
+    <div class="toast-body">
+      <strong>${titles[safeType]}</strong>
+      <span>${typeof sanitizeEncoding === 'function' ? sanitizeEncoding(msg) : msg}</span>
+    </div>
+    <button class="toast-close-btn" aria-label="Close notification">
+      <i data-lucide="x" style="width:14px;height:14px;"></i>
+    </button>
+    <div class="toast-progress"></div>
+  `;
 
   container.appendChild(toast);
+  initLucide();
 
-  setTimeout(() => {
-    toast.style.opacity = '0';
-    setTimeout(() => toast.remove(), 400);
+  const closeBtn = toast.querySelector('.toast-close-btn');
+  const dismiss = () => {
+    toast.classList.add('toast-hiding');
+    setTimeout(() => {
+      if (toast.parentNode) toast.remove();
+    }, 280);
+  };
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clearTimeout(timer);
+      dismiss();
+    });
+  }
+
+  const timer = setTimeout(() => {
+    dismiss();
   }, 3200);
 }
 
