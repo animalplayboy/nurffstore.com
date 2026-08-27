@@ -18,7 +18,7 @@
   <link rel="icon" type="image/jpeg" href="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/store_logo.jpg">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="styles.css?v=2.3">
+  <link rel="stylesheet" href="styles.css?v=2.6">
 </head>
 <body>
 
@@ -83,100 +83,6 @@
       </div>
     </div>
   </header>
-
-  <!-- 2. HERO BRAND PROMO CAROUSEL (GARENA 3D SLIDER) -->
-  <section class="hero-carousel-section" id="heroCarouselSection">
-    <div class="hero-carousel-wrapper">
-      
-      <!-- Stage containing the 3D slides -->
-      <div class="hero-carousel-stage" id="heroCarouselStage">
-        
-        <!-- Slide 0: NUR STORE Official Free Fire Banner -->
-        <div class="hero-slide active" data-slide-index="0" onclick="handleHeroSlideClick(0)">
-          <div class="hero-slide-inner">
-            <img src="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/hero_banner.png" alt="NUR STORE - Official Accounts & Top-Up Store" class="hero-slide-img">
-          </div>
-        </div>
-
-        <!-- Slide 1: DIAMONDS AT A DISCOUNT SLIDE -->
-        <div class="hero-slide next" data-slide-index="1" onclick="handleHeroSlideClick(1)">
-          <div class="hero-slide-inner hero-discount-slide">
-            <div class="discount-slide-bg"></div>
-            <div class="discount-slide-content">
-              <div class="discount-badge-pill">🔥 EXCLUSIVE DEALS</div>
-              <h2 class="discount-hero-title">DIAMONDS <span class="discount-subtext">at a DISCOUNT</span></h2>
-              <p class="discount-desc">UP TO 30% BONUS ON FREE FIRE TOP-UP • INSTANT DELIVERY</p>
-            </div>
-            <div class="discount-art-wrap">
-              <div class="gem-crystal gem-c1">💎</div>
-              <div class="gem-crystal gem-c2">💎</div>
-              <div class="gem-crystal gem-c3">✨</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Slide 2: BRAND NEW OFFICIAL GARENA CARD SLIDE -->
-        <div class="hero-slide prev" data-slide-index="2" onclick="handleHeroSlideClick(2)">
-          <div class="hero-slide-inner hero-garena-card-slide">
-            <div class="hero-banner-left">
-              <div class="hero-shell-icon" style="padding:6px;">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
-                  <defs>
-                    <radialGradient id="shellGrad" cx="50%" cy="30%" r="70%">
-                      <stop offset="0%" stop-color="#FFF078" />
-                      <stop offset="45%" stop-color="#FFB800" />
-                      <stop offset="90%" stop-color="#E07000" />
-                      <stop offset="100%" stop-color="#B84800" />
-                    </radialGradient>
-                  </defs>
-                  <path d="M24 6 C12 6 6 18 8 32 C9 38 14 42 24 42 C34 42 39 38 40 32 C42 18 36 6 24 6 Z" fill="url(#shellGrad)"/>
-                  <path d="M24 8 C20 18 20 36 24 40" stroke="#FFF" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-                  <path d="M17 11 C15 20 16 34 20 39" stroke="#FFEAA0" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>
-                  <path d="M31 11 C33 20 32 34 28 39" stroke="#D06000" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
-                  <path d="M12 18 C11 25 13 32 17 37" stroke="#FFEAA0" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
-                  <path d="M36 18 C37 25 35 32 31 37" stroke="#D06000" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>
-                </svg>
-              </div>
-              <div class="hero-banner-text">
-                <h2>BRAND <span class="red-text">NEW</span> OFFICIAL TOP UP &amp; ACCOUNTS</h2>
-                <p>100% Safe Recovery • Instant WhatsApp Delivery</p>
-              </div>
-            </div>
-            <div class="hero-trust-pills">
-              <span>🛡️ SAFER</span>
-              <span>•</span>
-              <span>⚡ FASTER</span>
-              <span>•</span>
-              <span>💎 EASIER</span>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Navigation Arrows -->
-      <button class="hero-nav-arrow hero-nav-prev" onclick="prevHeroSlide(event)" aria-label="Previous Slide">
-        <i data-lucide="chevron-left" style="width:20px;height:20px;"></i>
-      </button>
-      <button class="hero-nav-arrow hero-nav-next" onclick="nextHeroSlide(event)" aria-label="Next Slide">
-        <i data-lucide="chevron-right" style="width:20px;height:20px;"></i>
-      </button>
-
-      <!-- Carousel Pagination Dots -->
-      <div class="hero-dots-wrap" id="heroDotsWrap">
-        <button class="hero-dot active" onclick="goToHeroSlide(0)" aria-label="Slide 1"></button>
-        <button class="hero-dot" onclick="goToHeroSlide(1)" aria-label="Slide 2"></button>
-        <button class="hero-dot" onclick="goToHeroSlide(2)" aria-label="Slide 3"></button>
-      </div>
-
-      <!-- Side Edge Fade Masks (matching Garena Official) -->
-      <div class="hero-side-mask mask-left"></div>
-      <div class="hero-side-mask mask-right"></div>
-    </div>
-  </section>
-
-  <!-- Gold Divider Strip -->
-  <div class="gold-divider-strip"></div>
 
   <!-- MAIN SHOPPING CONTENT AREA -->
   <main class="container">
@@ -755,6 +661,9 @@
           <span id="adminActiveUserBadge" style="font-size:0.72rem;font-weight:700;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px;">
             <i data-lucide="shield-check" style="width:12px;height:12px;"></i> Authenticated Admin
           </span>
+          <span style="font-size:0.72rem;font-weight:700;background:#f0fdf4;color:#15803d;padding:3px 10px;border-radius:12px;border:1px solid #bbf7d0;display:inline-flex;align-items:center;gap:5px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block;"></span> Cloud Live
+          </span>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <button class="btn-reset-filter" style="padding:4px 10px;font-size:0.75rem;color:#dc2626;" onclick="handleAdminLogout()" title="Logout of Admin Session">
@@ -772,14 +681,8 @@
           <button type="button" class="admin-main-tab active" id="tabBtnAdminInventory" onclick="switchAdminMainTab('inventory')">
             <i data-lucide="package" style="width:16px;height:16px;"></i> Account Listings &amp; Inventory
           </button>
-          <button type="button" class="admin-main-tab" id="tabBtnAdminBanners" onclick="switchAdminMainTab('banners')">
-            <i data-lucide="image" style="width:16px;height:16px;"></i> Hero Banners &amp; Slider
-          </button>
           <button type="button" class="admin-main-tab" id="tabBtnAdminAccess" onclick="switchAdminMainTab('access')">
             <i data-lucide="shield-check" style="width:16px;height:16px;"></i> Admin Access &amp; Team
-          </button>
-          <button type="button" class="admin-main-tab" id="tabBtnAdminSupabase" onclick="switchAdminMainTab('supabase')">
-            <i data-lucide="database" style="width:16px;height:16px;"></i> Supabase Cloud Sync
           </button>
         </div>
 
@@ -1233,142 +1136,7 @@
           </div>
         </div>
 
-        <!-- TAB PANE 2: HERO BANNERS & SLIDER MANAGEMENT -->
-        <div id="adminPaneBanners" class="admin-tab-pane">
-          
-          <!-- Banner Manager Header Banner -->
-          <div style="background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%); color:#fff; border-radius:12px; padding:18px 20px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1px solid #374151;">
-            <div style="display:flex; align-items:center; gap:14px;">
-              <div style="width:46px; height:46px; border-radius:10px; background:rgba(216,26,13,0.15); border:1.5px solid var(--garena-red); display:flex; align-items:center; justify-content:center; color:#ef4444; flex-shrink:0;">
-                <i data-lucide="image" style="width:24px; height:24px;"></i>
-              </div>
-              <div>
-                <h4 style="font-size:1.1rem; font-weight:900; font-family:'Rajdhani',sans-serif; color:#fff; margin:0;">
-                  Hero Carousel &amp; Promo Banner Manager
-                </h4>
-                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
-                  Upload custom photos, arrange slider sequence, and manage live homepage promotions.
-                </div>
-              </div>
-            </div>
-            
-            <div style="display:flex; align-items:center; gap:8px;">
-              <button type="button" class="btn-garena-proceed" style="padding:7px 14px; font-size:0.78rem; background:var(--garena-red); border-color:var(--garena-red);" onclick="openAddBannerForm()">
-                <i data-lucide="plus-circle" style="width:15px; height:15px;"></i> Add New Slide / Banner
-              </button>
-              <button type="button" class="btn-reset-filter" style="padding:7px 12px; font-size:0.78rem; background:#1f2937; color:#e5e7eb; border:1px solid #374151;" onclick="resetHeroBannersToDefault()" title="Reset to default banners">
-                <i data-lucide="rotate-ccw" style="width:13px; height:13px;"></i> Reset
-              </button>
-            </div>
-          </div>
-
-          <!-- Banner Aspect Ratio / Size Recommendations Alert Card -->
-          <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <i data-lucide="sparkles" style="width:20px; height:20px; color:#16a34a; flex-shrink:0;"></i>
-              <div style="font-size:0.8rem; color:#166534;">
-                <strong>Recommended Image Size:</strong> <b>1360 × 370 px</b> (Aspect Ratio ~ 3.7:1) for ultra-sharp HD quality without cropping.
-              </div>
-            </div>
-            <span style="font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:10px;">Retina HD 2X</span>
-          </div>
-
-          <!-- Add / Edit Banner Form (Hidden by default, shown when adding/editing) -->
-          <div id="adminBannerFormWrap" style="display:none; background:#ffffff; border:2px solid #cbd5e1; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 10px 25px rgba(0,0,0,0.08);">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #e2e8f0;">
-              <h4 id="adminBannerFormTitle" style="font-size:1.05rem; font-weight:900; color:#0f172a; margin:0; display:flex; align-items:center; gap:8px;">
-                <i data-lucide="plus-circle" style="width:18px; height:18px; color:var(--garena-red);"></i> Add New Hero Banner
-              </h4>
-              <button type="button" class="btn-reset-filter" style="padding:4px 10px; font-size:0.75rem;" onclick="closeBannerForm()">
-                <i data-lucide="x" style="width:13px; height:13px;"></i> Close Form
-              </button>
-            </div>
-
-            <form id="heroBannerForm" onsubmit="handleSaveHeroBanner(event)">
-              <input type="hidden" id="adminBannerEditId" value="">
-              
-              <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:16px; margin-bottom:16px;">
-                <!-- Left: Form inputs -->
-                <div>
-                  <div class="form-group">
-                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
-                      <i data-lucide="type" style="width:13px; height:13px; color:var(--garena-red);"></i> Banner Title / Main Heading
-                    </label>
-                    <input type="text" id="adminBannerTitle" class="form-control" placeholder="e.g. NUR STORE - SG Region Verified Accounts" required oninput="updateBannerLivePreview()">
-                  </div>
-
-                  <div class="form-group">
-                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
-                      <i data-lucide="align-left" style="width:13px; height:13px; color:#64748b;"></i> Subtitle / Promo Tagline
-                    </label>
-                    <input type="text" id="adminBannerSubtitle" class="form-control" placeholder="e.g. 100% Safe Recovery • Instant WhatsApp Delivery" oninput="updateBannerLivePreview()">
-                  </div>
-
-                  <!-- Direct Photo Upload from PC -->
-                  <div class="form-group">
-                    <label class="form-label" style="display:flex; align-items:center; justify-content:space-between;">
-                      <span style="display:flex; align-items:center; gap:6px;">
-                        <i data-lucide="upload" style="width:13px; height:13px; color:var(--garena-red);"></i> Upload Banner Photo (Device / PC)
-                      </span>
-                      <span id="adminBannerFileCount" style="font-size:0.72rem; color:#16a34a; font-weight:700;"></span>
-                    </label>
-                    <div style="display:flex; gap:10px; align-items:center;">
-                      <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:8px; padding:12px; cursor:pointer; transition:all 0.2s ease;">
-                        <i data-lucide="image-plus" style="width:20px; height:20px; color:var(--garena-red);"></i>
-                        <span style="font-size:0.82rem; font-weight:700; color:#334155;">Choose Photo from Computer / Phone</span>
-                        <input type="file" id="adminBannerFileInput" accept="image/*" style="display:none;" onchange="handleBannerFileUpload(this)">
-                      </label>
-                    </div>
-                  </div>
-
-                  <!-- Or Paste Direct Image URL -->
-                  <div class="form-group">
-                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
-                      <i data-lucide="link" style="width:13px; height:13px; color:#64748b;"></i> Or Image File / URL (e.g. hero_banner.png)
-                    </label>
-                    <input type="text" id="adminBannerImageUrl" class="form-control" placeholder="hero_banner.png or https://..." oninput="updateBannerLivePreview()">
-                  </div>
-
-                  <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
-                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; font-weight:700; color:#0f172a;">
-                      <input type="checkbox" id="adminBannerActiveCheckbox" checked style="width:16px; height:16px; accent-color:var(--garena-red);">
-                      Active (Display in Slider)
-                    </label>
-                  </div>
-                </div>
-
-                <!-- Right: Live Banner Preview -->
-                <div>
-                  <div class="form-label" style="margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                    <i data-lucide="eye" style="width:13px; height:13px; color:#64748b;"></i> Live Slider Preview
-                  </div>
-                  <div id="adminBannerPreviewBox" style="width:100%; height:130px; border-radius:10px; overflow:hidden; background:#0d0d0d; border:1.5px solid #e2e8f0; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.15); position:relative;">
-                    <img id="adminBannerPreviewImg" src="hero_banner.png" alt="Preview" style="width:100%; height:100%; object-fit:cover; display:block;">
-                  </div>
-                  <div style="font-size:0.7rem; color:#64748b; text-align:center; margin-top:6px;">
-                    Preview of how this banner appears in the 3D slider.
-                  </div>
-                </div>
-              </div>
-
-              <!-- Action Buttons -->
-              <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; padding-top:14px; border-top:1px solid #e2e8f0;">
-                <button type="button" class="btn-reset-filter" style="padding:8px 16px;" onclick="closeBannerForm()">Cancel</button>
-                <button type="submit" class="btn-garena-proceed" style="padding:8px 20px; font-size:0.85rem;">
-                  <i data-lucide="check-circle" style="width:16px; height:16px;"></i> Save Banner
-                </button>
-              </div>
-            </form>
-          </div>
-
-          <!-- Banners Inventory Grid / List -->
-          <div id="adminBannersListContainer" style="display:grid; grid-template-columns:1fr; gap:12px;">
-            <!-- Populated dynamically by app.js -->
-          </div>
-
-        </div>
-
-        <!-- TAB PANE 3: ADMIN ACCESS & SECURITY CONTROL -->
+        <!-- TAB PANE 2: ADMIN ACCESS & SECURITY CONTROL -->
         <div id="adminPaneAccess" class="admin-tab-pane">
           <!-- Store Master & Security Overview Banner -->
           <div style="background:#0f172a;color:#fff;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #1e293b;">
@@ -1416,89 +1184,6 @@
             <!-- Authorized Admins List -->
             <div id="authorizedAdminsListContainer">
               <!-- Rendered by app.js -->
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB PANE 4: SUPABASE REALTIME CLOUD DATABASE -->
-        <div id="adminPaneSupabase" class="admin-tab-pane">
-          <div style="background:#0f172a;color:#fff;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #1e293b;">
-            <div style="display:flex;align-items:center;gap:12px;">
-              <div style="width:44px;height:44px;border-radius:10px;background:#3ecf8e;display:flex;align-items:center;justify-content:center;color:#0f172a;box-shadow:0 4px 14px rgba(62,207,142,0.4);flex-shrink:0;">
-                <i data-lucide="database" style="width:24px;height:24px;"></i>
-              </div>
-              <div>
-                <h4 style="font-size:1.1rem;font-weight:900;font-family:'Rajdhani',sans-serif;color:#fff;margin:0;">Supabase Realtime Cloud Database</h4>
-                <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;">
-                  100% Free Realtime PostgreSQL Sync across all visitors &amp; devices worldwide.
-                </div>
-              </div>
-            </div>
-            <div style="display:flex;align-items:center;gap:8px;" id="supabaseConnectionBadge">
-              <span style="background:#dc2626;color:#ffffff;font-size:0.72rem;font-weight:800;padding:4px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px;">
-                <span style="width:6px;height:6px;border-radius:50%;background:#ffffff;"></span> Not Connected
-              </span>
-            </div>
-          </div>
-
-          <!-- Configuration Form Card -->
-          <div class="admin-access-card" style="margin-top:0;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-              <div>
-                <div style="font-size:0.95rem;font-weight:900;color:#0f172a;display:flex;align-items:center;gap:6px;">
-                  <i data-lucide="key" style="width:16px;height:16px;color:#3ecf8e;"></i> Supabase API Credentials
-                </div>
-                <div style="font-size:0.75rem;color:#64748b;margin-top:2px;">
-                  Create a free project at <a href="https://supabase.com" target="_blank" style="color:#2563eb;text-decoration:underline;">supabase.com</a> and paste your Project URL &amp; Anon Public Key below.
-                </div>
-              </div>
-            </div>
-
-            <form id="supabaseConfigForm" onsubmit="handleSaveSupabaseConfig(event)" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
-              <div class="form-group" style="margin:0;">
-                <label class="form-label" style="font-size:0.75rem;">Project URL</label>
-                <input type="text" id="supabaseUrlInput" class="form-control" placeholder="https://xxxxxxxx.supabase.co" required>
-              </div>
-              <div class="form-group" style="margin:0;">
-                <label class="form-label" style="font-size:0.75rem;">Anon Public Key (anon-key)</label>
-                <input type="text" id="supabaseKeyInput" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR..." required>
-              </div>
-              <div style="grid-column:1 / -1;display:flex;gap:10px;justify-content:flex-end;">
-                <button type="button" class="btn-reset-filter" onclick="handleClearSupabaseConfig()" style="padding:8px 14px;font-size:0.8rem;color:#dc2626;">Disconnect</button>
-                <button type="submit" class="btn-garena-proceed" style="padding:8px 18px;font-size:0.82rem;background:#10b981;border-color:#10b981;">
-                  <i data-lucide="save" style="width:14px;height:14px;"></i> Save &amp; Connect Supabase
-                </button>
-              </div>
-            </form>
-
-            <div style="border-top:1px solid #e2e8f0;padding-top:16px;display:flex;flex-direction:column;gap:14px;">
-              <!-- 1-Click Push Local Data to Supabase -->
-              <div style="display:flex;align-items:center;justify-content:space-between;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;flex-wrap:wrap;gap:10px;">
-                <div>
-                  <div style="font-size:0.88rem;font-weight:800;color:#166534;display:flex;align-items:center;gap:6px;">
-                    <i data-lucide="upload-cloud" style="width:16px;height:16px;"></i> Push All Local Accounts &amp; Banners to Supabase
-                  </div>
-                  <div style="font-size:0.72rem;color:#15803d;margin-top:2px;">
-                    Uploads all existing accounts and slider banners into your Supabase database in 1 click.
-                  </div>
-                </div>
-                <button type="button" class="btn-garena-proceed" style="padding:7px 16px;font-size:0.78rem;background:#15803d;border-color:#15803d;" onclick="pushAllDataToSupabase()">
-                  <i data-lucide="upload" style="width:14px;height:14px;"></i> Push Data to Cloud
-                </button>
-              </div>
-
-              <!-- SQL Setup Assistant -->
-              <div style="background:#0f172a;border-radius:10px;padding:14px;color:#e2e8f0;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
-                  <div style="font-size:0.82rem;font-weight:800;color:#38bdf8;display:flex;align-items:center;gap:6px;">
-                    <i data-lucide="terminal" style="width:14px;height:14px;"></i> Supabase SQL Schema (Run in Supabase SQL Editor)
-                  </div>
-                  <button type="button" class="btn-reset-filter" style="padding:3px 8px;font-size:0.7rem;color:#38bdf8;border-color:#0284c7;background:#0369a1;" onclick="copySupabaseSql()">
-                    <i data-lucide="copy" style="width:12px;height:12px;"></i> Copy SQL Query
-                  </button>
-                </div>
-                <pre id="supabaseSqlCode" style="background:#020617;border:1px solid #1e293b;border-radius:6px;padding:10px;font-family:monospace;font-size:0.72rem;color:#34d399;max-height:140px;overflow-y:auto;white-space:pre-wrap;"></pre>
-              </div>
             </div>
           </div>
         </div>
@@ -1790,7 +1475,7 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data.js?v=2.3"></script>
-  <script src="app.js?v=2.3"></script>
+  <script src="data.js?v=2.6"></script>
+  <script src="app.js?v=2.6"></script>
 </body>
 </html>

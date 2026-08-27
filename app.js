@@ -240,11 +240,11 @@ function renderHeroCarousel() {
 }
 
 function initHeroCarousel() {
+  const stage = document.getElementById('heroCarouselStage');
+  if (!stage) return;
+
   updateHeroCarousel();
   startHeroSlideTimer();
-
-  // Mobile Touch Swipe Support
-  const stage = document.getElementById('heroCarouselStage');
   if (stage && !stage.dataset.swipeBound) {
     stage.dataset.swipeBound = 'true';
     let touchStartX = 0;
@@ -386,31 +386,21 @@ function formatDirectImageUrl(url) {
   return clean;
 }
 
-// Load Inventory from LocalStorage or default dataset with Version Sync
+// Load Inventory from LocalStorage or default dataset
 function loadInventory() {
-  const currentVer = typeof DATASET_VERSION !== 'undefined' ? DATASET_VERSION : 'v1.0';
-  const savedVer = localStorage.getItem('nexus_dataset_version');
   const saved = localStorage.getItem('nexus_inventory');
-
-  // If saved in same version session, load saved; if dataset updated in data.js, load fresh data.js!
-  if (saved && savedVer === currentVer) {
+  if (saved) {
     try {
       appState.accounts = JSON.parse(saved);
       appState.accounts.forEach(acc => {
-        if (acc.title) {
-          acc.title = acc.title.replace(/^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\s]+/u, '').trim();
-        }
+        if (acc.title) acc.title = sanitizeEncoding(acc.title);
       });
-      saveInventory();
     } catch (e) {
       appState.accounts = [...DEFAULT_ACCOUNTS];
-      localStorage.setItem('nexus_dataset_version', currentVer);
       saveInventory();
     }
   } else {
-    // New GitHub deployment or updated data.js -> automatically sync with DEFAULT_ACCOUNTS
     appState.accounts = [...DEFAULT_ACCOUNTS];
-    localStorage.setItem('nexus_dataset_version', currentVer);
     saveInventory();
   }
 
@@ -2444,9 +2434,32 @@ function adminChangeStatus(accId, newStatus) {
   if (acc) {
     acc.status = newStatus;
     saveInventory();
+    syncAccountToSupabase(acc);
     renderCatalog();
     showToast(`Status updated for ${acc.code}`, "success");
   }
+}
+
+function adminDeleteAccount(accId) {
+  const acc = appState.accounts.find(a => a.id === accId);
+  const accCode = acc ? acc.code : 'Account';
+
+  showConfirmDialog({
+    title: `Delete listing ${accCode}?`,
+    desc: `Are you sure you want to permanently delete listing ${accCode}? This will remove it from the store and cloud database.`,
+    icon: 'trash-2',
+    confirmBtnText: 'Delete Permanently',
+    btnColor: '#dc2626',
+    onConfirm: async () => {
+      appState.accounts = appState.accounts.filter(a => a.id !== accId);
+      saveInventory();
+      renderCatalog();
+      renderAdminInventory();
+      updateGameBadgeCounts();
+      await syncAccountToSupabase({ id: accId }, 'delete');
+      showToast(`Listing ${accCode} permanently deleted from Cloud & Local!`, "info");
+    }
+  });
 }
 
 // Custom Confirmation Dialog Controller
@@ -3112,11 +3125,11 @@ async function fetchInventoryFromSupabase() {
   if (!supabaseClient) return;
   try {
     const { data, error } = await supabaseClient.from('accounts').select('*').order('created_at', { ascending: false });
-    if (!error && data && data.length > 0) {
+    if (!error && data) {
       appState.accounts = data.map(row => ({
         id: row.id,
         category: row.category || 'freefire',
-        title: row.title,
+        title: sanitizeEncoding(row.title),
         code: row.code,
         status: row.status || 'available',
         isGrandPrize: row.is_grand_prize || false,
@@ -3126,8 +3139,9 @@ async function fetchInventoryFromSupabase() {
         images: Array.isArray(row.images) ? row.images : [],
         stats: row.stats || {},
         evoList: Array.isArray(row.evo_list) ? row.evo_list : [],
-        description: row.description || ''
+        description: sanitizeEncoding(row.description || '')
       }));
+      saveInventory();
       renderCatalog();
       renderAdminInventory();
       updateGameBadgeCounts();
@@ -3217,7 +3231,9 @@ async function syncAccountToSupabase(acc, action = 'upsert') {
   if (!supabaseClient) return;
   try {
     if (action === 'delete') {
-      await supabaseClient.from('accounts').delete().eq('id', acc.id);
+      const { error } = await supabaseClient.from('accounts').delete().eq('id', acc.id);
+      if (error) throw error;
+      console.log(`🗑️ Deleted account ${acc.id} from Supabase Cloud`);
     } else {
       const row = {
         id: acc.id,
@@ -3235,7 +3251,9 @@ async function syncAccountToSupabase(acc, action = 'upsert') {
         description: acc.description || '',
         updated_at: new Date().toISOString()
       };
-      await supabaseClient.from('accounts').upsert(row);
+      const { error } = await supabaseClient.from('accounts').upsert(row);
+      if (error) throw error;
+      console.log(`💾 Saved account ${acc.code} to Supabase Cloud`);
     }
   } catch (e) {
     console.error("Supabase sync account error:", e);
@@ -3369,7 +3387,7 @@ function copySupabaseSql() {
 }
 
 function switchAdminMainTab(tab) {
-  const tabs = ['inventory', 'banners', 'access', 'supabase'];
+  const tabs = ['inventory', 'access', 'supabase'];
   tabs.forEach(t => {
     const btn = document.getElementById(`tabBtnAdmin${t.charAt(0).toUpperCase() + t.slice(1)}`);
     const pane = document.getElementById(`adminPane${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -3377,7 +3395,6 @@ function switchAdminMainTab(tab) {
     if (pane) pane.classList.toggle('active', t === tab);
   });
   if (tab === 'inventory') renderAdminInventory();
-  if (tab === 'banners') renderAdminBannersList();
   if (tab === 'access') renderSecondaryAdminsList();
   if (tab === 'supabase') renderSupabaseStatus();
   initLucide();
