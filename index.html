@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NUR STORE | Official Accounts Marketplace</title>
+  <meta name="description" content="Official store for verified Free Fire accounts, CapCut Pro subscriptions, and monetized TikTok accounts with instant WhatsApp handover.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="store_logo.jpg">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Announcement Bar (Garena Red Strip) -->
+  <div class="announce-bar">
+    <span class="announce-badge">OFFICIAL STORE</span>
+    <span>Official NUR STORE • SG Region Verified Accounts, CapCut Pro, TikTok &amp; YouTube Marketplace</span>
+  </div>
+
+  <!-- 1. GARENA TOP NAVBAR (CLEAN WHITE) -->
+  <header class="top-navbar">
+    <div class="container navbar-inner">
+      <div class="garena-brand">
+        <a href="#" class="garena-logo-svg" onclick="selectGameCategory('freefire'); return false;">
+          <div class="garena-flame-icon" style="overflow:hidden;padding:0;background:transparent;box-shadow:0 2px 8px rgba(0,0,0,0.25);border:1.5px solid #fbbf24;border-radius:10px;">
+            <img src="store_logo.jpg" alt="NUR STORE" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="garena-brand-text">
+            <span style="font-family:'Rajdhani',sans-serif;font-size:1.3rem;font-weight:900;letter-spacing:0.5px;color:#111;">NUR STORE</span>
+            <span class="brand-pipe">|</span>
+            <span class="brand-sub">Official Account Seller</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="navbar-right">
+        <!-- Currency Toggle -->
+        <button id="currLKR" class="curr-pill-btn active" onclick="setCurrency('LKR')">LKR</button>
+        <button id="currUSD" class="curr-pill-btn" onclick="setCurrency('USD')">USD</button>
+
+        <!-- Sell Portal -->
+        <button class="btn-sell-nav" onclick="openSellModal()">
+          <i data-lucide="dollar-sign" style="width:13px;height:13px;"></i>
+          <span>Sell Account</span>
+        </button>
+
+        <!-- Admin Profile Icon -->
+        <button class="user-avatar-btn" onclick="openAdminModal()" title="Store Admin Dashboard">
+          <i data-lucide="user" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. HERO BRAND PROMO CAROUSEL (GARENA 3D SLIDER) -->
+  <section class="hero-carousel-section" id="heroCarouselSection">
+    <div class="hero-carousel-wrapper">
+      
+      <!-- Stage containing the 3D slides -->
+      <div class="hero-carousel-stage" id="heroCarouselStage">
+        
+        <!-- Slide 0: NUR STORE Official Free Fire Banner -->
+        <div class="hero-slide active" data-slide-index="0" onclick="handleHeroSlideClick(0)">
+          <div class="hero-slide-inner">
+            <img src="hero_banner.png" alt="NUR STORE - Official Accounts & Top-Up Store" class="hero-slide-img">
+          </div>
+        </div>
+
+        <!-- Slide 1: DIAMONDS AT A DISCOUNT SLIDE -->
+        <div class="hero-slide next" data-slide-index="1" onclick="handleHeroSlideClick(1)">
+          <div class="hero-slide-inner hero-discount-slide">
+            <div class="discount-slide-bg"></div>
+            <div class="discount-slide-content">
+              <div class="discount-badge-pill">🔥 EXCLUSIVE DEALS</div>
+              <h2 class="discount-hero-title">DIAMONDS <span class="discount-subtext">at a DISCOUNT</span></h2>
+              <p class="discount-desc">UP TO 30% BONUS ON FREE FIRE TOP-UP • INSTANT DELIVERY</p>
+            </div>
+            <div class="discount-art-wrap">
+              <div class="gem-crystal gem-c1">💎</div>
+              <div class="gem-crystal gem-c2">💎</div>
+              <div class="gem-crystal gem-c3">✨</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: BRAND NEW OFFICIAL GARENA CARD SLIDE -->
+        <div class="hero-slide prev" data-slide-index="2" onclick="handleHeroSlideClick(2)">
+          <div class="hero-slide-inner hero-garena-card-slide">
+            <div class="hero-banner-left">
+              <div class="hero-shell-icon" style="padding:6px;">
+                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+                  <defs>
+                    <radialGradient id="shellGrad" cx="50%" cy="30%" r="70%">
+                      <stop offset="0%" stop-color="#FFF078" />
+                      <stop offset="45%" stop-color="#FFB800" />
+                      <stop offset="90%" stop-color="#E07000" />
+                      <stop offset="100%" stop-color="#B84800" />
+                    </radialGradient>
+                  </defs>
+                  <path d="M24 6 C12 6 6 18 8 32 C9 38 14 42 24 42 C34 42 39 38 40 32 C42 18 36 6 24 6 Z" fill="url(#shellGrad)"/>
+                  <path d="M24 8 C20 18 20 36 24 40" stroke="#FFF" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                  <path d="M17 11 C15 20 16 34 20 39" stroke="#FFEAA0" stroke-width="1.6" stroke-linecap="round" opacity="0.7"/>
+                  <path d="M31 11 C33 20 32 34 28 39" stroke="#D06000" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
+                  <path d="M12 18 C11 25 13 32 17 37" stroke="#FFEAA0" stroke-width="1.4" stroke-linecap="round" opacity="0.6"/>
+                  <path d="M36 18 C37 25 35 32 31 37" stroke="#D06000" stroke-width="1.4" stroke-linecap="round" opacity="0.5"/>
+                </svg>
+              </div>
+              <div class="hero-banner-text">
+                <h2>BRAND <span class="red-text">NEW</span> OFFICIAL TOP UP &amp; ACCOUNTS</h2>
+                <p>100% Safe Recovery • Instant WhatsApp Delivery</p>
+              </div>
+            </div>
+            <div class="hero-trust-pills">
+              <span>🛡️ SAFER</span>
+              <span>•</span>
+              <span>⚡ FASTER</span>
+              <span>•</span>
+              <span>💎 EASIER</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="hero-nav-arrow hero-nav-prev" onclick="prevHeroSlide(event)" aria-label="Previous Slide">
+        <i data-lucide="chevron-left" style="width:20px;height:20px;"></i>
+      </button>
+      <button class="hero-nav-arrow hero-nav-next" onclick="nextHeroSlide(event)" aria-label="Next Slide">
+        <i data-lucide="chevron-right" style="width:20px;height:20px;"></i>
+      </button>
+
+      <!-- Carousel Pagination Dots -->
+      <div class="hero-dots-wrap" id="heroDotsWrap">
+        <button class="hero-dot active" onclick="goToHeroSlide(0)" aria-label="Slide 1"></button>
+        <button class="hero-dot" onclick="goToHeroSlide(1)" aria-label="Slide 2"></button>
+        <button class="hero-dot" onclick="goToHeroSlide(2)" aria-label="Slide 3"></button>
+      </div>
+
+      <!-- Side Edge Fade Masks (matching Garena Official) -->
+      <div class="hero-side-mask mask-left"></div>
+      <div class="hero-side-mask mask-right"></div>
+    </div>
+  </section>
+
+  <!-- Gold Divider Strip -->
+  <div class="gold-divider-strip"></div>
+
+  <!-- MAIN SHOPPING CONTENT AREA -->
+  <main class="container">
+    
+    <!-- 3. ACCOUNT SELECTION ROW (OFFICIAL MODERN APP ICONS) -->
+    <section class="game-select-section">
+      <div class="game-select-title">
+        <span>Account Selection</span>
+      </div>
+
+      <div class="game-icons-grid">
+        <!-- Tile 1: Free Fire -->
+        <div class="game-item-tile active" id="gameTileFF" onclick="selectGameCategory('freefire')">
+          <div class="game-app-icon">
+            <span class="game-hot-tag">HOT</span>
+            <div class="modern-game-icon">
+              <img src="ff_icon.jpg" alt="Free Fire MAX" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
+            </div>
+          </div>
+          <span class="game-item-name">Free Fire</span>
+          <span class="game-item-count" id="countFFBadge">In Stock</span>
+        </div>
+
+        <!-- Tile 2: CapCut Pro -->
+        <div class="game-item-tile" id="gameTileCC" onclick="selectGameCategory('capcut')">
+          <div class="game-app-icon">
+            <div class="modern-game-icon">
+              <img src="capcut_icon.jpg" alt="CapCut Pro" style="width:100%;height:100%;object-fit:contain;padding:6px;background:#ffffff;border-radius:14px;">
+            </div>
+          </div>
+          <span class="game-item-name">CapCut Pro</span>
+          <span class="game-item-count" id="countCCBadge">VIP Cloud</span>
+        </div>
+
+        <!-- Tile 3: TikTok -->
+        <div class="game-item-tile" id="gameTileTT" onclick="selectGameCategory('tiktok')">
+          <div class="game-app-icon">
+            <div class="modern-game-icon">
+              <img src="tiktok_icon.jpg" alt="TikTok" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
+            </div>
+          </div>
+          <span class="game-item-name">TikTok</span>
+          <span class="game-item-count" id="countTTBadge">Monetized</span>
+        </div>
+
+        <!-- Tile 4: YouTube -->
+        <div class="game-item-tile" id="gameTileYT" onclick="selectGameCategory('youtube')">
+          <div class="game-app-icon">
+            <div class="modern-game-icon">
+              <img src="youtube_icon.jpg" alt="YouTube Channels" style="width:100%;height:100%;object-fit:contain;padding:4px;background:#ffffff;border-radius:14px;">
+            </div>
+          </div>
+          <span class="game-item-name">YouTube</span>
+          <span class="game-item-count" id="countYTBadge">Channels</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. SELECTED GAME RED BANNER HEADER -->
+    <div class="selected-game-banner" id="selectedGameBanner">
+      <div class="sel-game-info">
+        <div class="sel-game-avatar" id="selGameAvatar" style="overflow:hidden;padding:0;">
+          <img src="ff_icon.jpg" alt="Free Fire" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="sel-game-text">
+          <h3 id="selGameTitle">Free Fire Accounts &amp; Top Up</h3>
+          <div class="sel-game-badge">
+            <i data-lucide="shield-check" style="width:12px;height:12px;"></i>
+            <span>100% Secure Payment &amp; Instant Handover</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. GARENA STEP-BY-STEP PURCHASE PANEL -->
+    <div class="purchase-flow-container" id="purchaseFlowContainer">
+      
+      <!-- STEP 1: Select Account -->
+      <div class="step-block">
+        <div class="step-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="step-circle-num">1</span>
+            <h4>Select Account</h4>
+          </div>
+
+          <!-- Quick Status Filter Pills, Price Range & Compact Search -->
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <div class="denom-filter-tabs" style="margin-bottom:0;">
+              <button class="denom-tab active" id="tabStatusAll" onclick="filterByStatus('all')">All Accounts</button>
+              <button class="denom-tab" id="tabStatusAvail" onclick="filterByStatus('available')">Available</button>
+              <button class="denom-tab" id="tabStatusSale" onclick="filterByStatus('sale')"><i data-lucide="flame" style="width:13px;height:13px;color:#ef4444;vertical-align:-1px;"></i> Hot Sale</button>
+              <button class="denom-tab" id="tabStatusGrand" onclick="filterByGrandPrize()"><i data-lucide="crown" style="width:13px;height:13px;color:#f59e0b;vertical-align:-1px;"></i> Grand Prize</button>
+              <button class="denom-tab" id="tabStatusSold" onclick="filterByStatus('sold')"><i data-lucide="lock" style="width:13px;height:13px;color:#6b7280;vertical-align:-1px;"></i> Sold Out</button>
+            </div>
+
+            <!-- Price Range Filter -->
+            <div class="price-filter-wrap" style="display:flex;align-items:center;gap:4px;background:#f3f4f6;border:1px solid var(--border-light);border-radius:20px;padding:3px 8px;">
+              <span style="font-size:0.7rem;font-weight:800;color:var(--text-muted);">LKR:</span>
+              <input type="number" id="minPriceInput" placeholder="Min" style="width:68px;border:1px solid var(--border-light);background:#fff;border-radius:12px;padding:3px 6px;font-size:0.75rem;outline:none;text-align:center;" oninput="handlePriceFilter()">
+              <span style="font-size:0.7rem;color:var(--text-muted);">-</span>
+              <input type="number" id="maxPriceInput" placeholder="Max" style="width:68px;border:1px solid var(--border-light);background:#fff;border-radius:12px;padding:3px 6px;font-size:0.75rem;outline:none;text-align:center;" oninput="handlePriceFilter()">
+            </div>
+
+            <div class="login-input-wrap" style="width:170px;">
+              <i data-lucide="search" style="width:14px;height:14px;"></i>
+              <input type="text" id="searchInput" placeholder="Search EVO, Lv..." style="padding:6px 10px 6px 32px;font-size:0.8rem;" oninput="handleSearch()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Denominations Grid -->
+        <div id="denominationsGrid" class="denominations-grid" style="margin-top:14px;">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display:none;">
+          <div class="empty-icon">
+            <i data-lucide="search-x" style="width:24px;height:24px;"></i>
+          </div>
+          <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:4px;">No Accounts Found</h3>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">Try adjusting your search keywords or switching game categories.</p>
+          <button class="btn-garena-proceed" onclick="resetFilters()">View All Accounts</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Payment Method Channels -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-circle-num">2</span>
+          <h4>Select Payment Method</h4>
+        </div>
+
+        <div class="payment-channels-grid" id="paymentChannelsGrid">
+          <!-- Channel 1: Nations Trust Bank -->
+          <div class="channel-card active" onclick="selectPaymentChannel(this, 'Nations Trust Bank (NTB)')">
+            <div class="channel-left">
+              <div class="channel-icon-wrap" style="padding:2px;background:#ffffff;border:1px solid #e2e8f0;">
+                <img src="ntb_logo.png" alt="NTB" style="width:100%;height:100%;object-fit:contain;border-radius:6px;">
+              </div>
+              <div>
+                <div class="channel-name">Nations Trust Bank (NTB)</div>
+                <div class="channel-sub">A/C: 200120234765</div>
+              </div>
+            </div>
+            <span class="badge-instant"><i data-lucide="zap" style="width:12px;height:12px;"></i> INSTANT</span>
+          </div>
+
+          <!-- Channel 2: People's Bank -->
+          <div class="channel-card" onclick="selectPaymentChannel(this, 'People\'s Bank')">
+            <div class="channel-left">
+              <div class="channel-icon-wrap" style="padding:2px;background:#ffffff;border:1px solid #e2e8f0;">
+                <img src="peoples_bank_logo.png" alt="People's Bank" style="width:100%;height:100%;object-fit:contain;border-radius:6px;">
+              </div>
+              <div>
+                <div class="channel-name">People's Bank</div>
+                <div class="channel-sub">A/C: 082200110131937</div>
+              </div>
+            </div>
+            <span class="badge-instant"><i data-lucide="zap" style="width:12px;height:12px;"></i> INSTANT</span>
+          </div>
+
+          <!-- Channel 3: Direct WhatsApp Order -->
+          <div class="channel-card" onclick="selectPaymentChannel(this, 'Direct WhatsApp Order')">
+            <div class="channel-left">
+              <div class="channel-icon-wrap" style="padding:2px;background:#ffffff;border:1px solid #e2e8f0;">
+                <img src="whatsapp_logo.jpg" alt="WhatsApp" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+              </div>
+              <div>
+                <div class="channel-name">Direct WhatsApp Order</div>
+                <div class="channel-sub">Live Admin Help</div>
+              </div>
+            </div>
+            <span class="badge-live"><span class="live-dot"></span> 24/7 LIVE</span>
+          </div>
+
+          <!-- Channel 4: EzCash Coming Soon -->
+          <div class="channel-card" style="opacity:0.75;cursor:not-allowed;" onclick="showToast('EzCash payment gateway is coming soon! Please use NTB, People\'s Bank, or WhatsApp.', 'info')">
+            <div class="channel-left">
+              <div class="channel-icon-wrap" style="padding:2px;background:#ffffff;border:1px solid #e2e8f0;">
+                <img src="ezcash_logo.png" alt="EzCash" style="width:100%;height:100%;object-fit:contain;border-radius:6px;">
+              </div>
+              <div>
+                <div class="channel-name">EzCash / Mobile Pay</div>
+                <div class="channel-sub">Mobile Wallet Gateway</div>
+              </div>
+            </div>
+            <span class="badge-coming-soon"><i data-lucide="clock" style="width:12px;height:12px;"></i> COMING SOON</span>
+          </div>
+        </div>
+
+        <!-- Proceed Action Bar / Checkout Dock -->
+        <div class="proceed-btn-wrap" id="proceedActionDock">
+          <div class="proceed-summary-left" id="selectedAccSummary">
+            <!-- Rendered dynamically by updateSelectedSummary() -->
+          </div>
+          <button class="btn-garena-proceed" id="btnProceedCheckout" onclick="proceedToCheckout()">
+            <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i>
+            <span>Proceed to Payment</span>
+            <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 6. HOW IT WORKS & REVIEWS -->
+    <section class="hiw-section" id="hiw" style="border-radius:12px;margin-bottom:30px;">
+      <div class="section-head">
+        <div class="sec-pill">Verified Garena Guarantee</div>
+        <h2 class="sec-title">How To Purchase Safely</h2>
+        <p class="sec-desc">Simple, safe, and transparent 4-step account handover process in Sri Lanka.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <span class="step-number">01</span>
+          <div class="step-icon-wrap">🔍</div>
+          <h3 class="step-title">Select Account</h3>
+          <p class="step-desc">Choose from verified Free Fire, CapCut Pro, or TikTok accounts. Inspect levels and weapon arsenals.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">02</span>
+          <div class="step-icon-wrap">💳</div>
+          <h3 class="step-title">Choose Payment</h3>
+          <p class="step-desc">Pay through Nations Trust Bank (NTB), People's Bank, EzCash, or Direct WhatsApp and attach your slip.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">03</span>
+          <div class="step-icon-wrap">💬</div>
+          <h3 class="step-title">WhatsApp Order</h3>
+          <p class="step-desc">Our automated checkout links your selected account code directly to our WhatsApp admin.</p>
+        </div>
+        <div class="step-card">
+          <span class="step-number">04</span>
+          <div class="step-icon-wrap">🔑</div>
+          <h3 class="step-title">Instant Handover</h3>
+          <p class="step-desc">Full login credentials transferred cleanly with 100% recovery guarantee within 5 minutes.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 7. MODERN DARK GAMING FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-main-grid">
+      <!-- Col 1: Brand & Socials -->
+      <div class="footer-col-brand">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <img src="store_logo.jpg" alt="NUR STORE" style="width:44px;height:44px;border-radius:10px;object-fit:cover;border:1.5px solid #fbbf24;box-shadow:0 2px 10px rgba(0,0,0,0.4);">
+          <div>
+            <h3 class="footer-brand-title" style="margin:0;font-size:1.15rem;">NUR STORE</h3>
+            <span style="font-size:0.7rem;color:#f59e0b;font-weight:700;letter-spacing:0.5px;">SG REGION VERIFIED STORE</span>
+          </div>
+        </div>
+        <p class="footer-brand-desc">
+          Sri Lanka's #1 verified marketplace for Free Fire accounts, CapCut Pro, TikTok &amp; YouTube channels.
+        </p>
+        <div class="footer-socials-row">
+          <a href="https://www.tiktok.com/@nurffstore?_r=1&amp;_t=ZS-99DJNZKGeFc" target="_blank" class="footer-social-btn" title="Official TikTok @nurffstore">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.5 6.34 6.34 0 0 0 1.9-4.49V8.89a8.28 8.28 0 0 0 4.87 1.57v-3.77z"/></svg>
+          </a>
+          <a href="https://wa.me/94778806366" target="_blank" class="footer-social-btn" title="WhatsApp">
+            <i data-lucide="message-circle" style="width:16px;height:16px;"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Quick Links</h4>
+        <ul class="footer-nav-list">
+          <li><a href="javascript:void(0)" onclick="navigateToHome()"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Home</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToBrowse('all')"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Browse Accounts</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToBrowse('sale')"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Hot Sale</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToBrowse('grand')"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Grand Prize</a></li>
+          <li><a href="javascript:void(0)" onclick="openSellModal()"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Sell Your Account</a></li>
+          <li><a href="javascript:void(0)" onclick="navigateToHowItWorks()"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> How It Works</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Support -->
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Support</h4>
+        <ul class="footer-nav-list">
+          <li><a href="javascript:void(0)" onclick="openContactModal()"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Contact Us</a></li>
+          <li><a href="javascript:void(0)" onclick="openTermsModal()"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> Terms &amp; Conditions</a></li>
+          <li><a href="javascript:void(0)" onclick="toggleChat()"><i data-lucide="chevron-right" style="width:12px;height:12px;color:var(--garena-red);"></i> 24/7 Live Support</a></li>
+        </ul>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px;">
+          <a href="https://whatsapp.com/channel/0029Vb98CZlGehELY8cMRu2f" target="_blank" class="btn-footer-wa-channel">
+            <i data-lucide="message-circle" style="width:15px;height:15px;"></i>
+            <span>WhatsApp Channel</span>
+          </a>
+          <a href="https://chat.whatsapp.com/Ip3CpUR71Jd4LrZqqcB3Gx?s=cl&p=i&mlu=4" target="_blank" class="btn-footer-wa-group" id="footerWaGroupBtn">
+            <i data-lucide="users" style="width:15px;height:15px;"></i>
+            <span>WhatsApp Group</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-disclaimer-wrap">
+      <div class="container">
+        <p class="footer-disclaimer-text">
+          Free Fire is a registered trademark of Garena. This site is not affiliated with or endorsed by Garena.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer-bottom-bar">
+      <div class="container footer-bottom-inner">
+        <div>&copy; 2026 - nurstore.com</div>
+        <div class="footer-bottom-links">
+          <a href="javascript:void(0)" onclick="openTermsModal()">Terms &amp; Conditions</a>
+          <span>•</span>
+          <a href="javascript:void(0)" onclick="openContactModal()">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- =========================================================
+       MODALS (DETAILS, CHECKOUT, SELL, ADMIN)
+       ========================================================= -->
+
+  <!-- 1. ACCOUNT DETAILS MODAL -->
+  <div id="detailModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'detailModal')">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="detModalTitle">
+          <i data-lucide="shield-check" style="color:var(--garena-red);"></i> Account Details
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('detailModal')">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+      <div class="modal-body" id="detModalBody">
+        <!-- Injected dynamically by app.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. BANK TRANSFER / SLIP UPLOAD CHECKOUT MODAL -->
+  <div id="checkoutModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'checkoutModal')">
+    <div class="modal-box" style="max-width:600px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="landmark" style="color:var(--garena-red);"></i> Bank Transfer &amp; Checkout
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('checkoutModal')">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div id="checkoutAccountSummary" style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+          <!-- Account Name & Price injected here -->
+        </div>
+
+        <h4 style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:#374151;text-transform:uppercase;">
+          1. Transfer to any Bank / Wallet Account below:
+        </h4>
+
+        <!-- Bank List -->
+        <div class="bank-cards-list" id="bankListContainer">
+          <!-- Populated from PAYMENT_METHODS -->
+        </div>
+
+        <h4 style="font-size:0.85rem;font-weight:800;margin-bottom:8px;color:#374151;text-transform:uppercase;">
+          2. Upload Payment Slip / Screenshot:
+        </h4>
+
+        <!-- Dropzone -->
+        <label for="slipFileInput" class="upload-dropzone" id="slipDropzone">
+          <div class="dropzone-icon">
+            <i data-lucide="upload" style="width:20px;height:20px;"></i>
+          </div>
+          <div style="font-size:0.88rem;font-weight:700;color:#111;margin-bottom:2px;" id="slipFileName">
+            Click to Browse or Upload Payment Receipt
+          </div>
+          <div style="font-size:0.72rem;color:#6b7280;">Supports JPG, PNG, PDF (Max 10MB)</div>
+          <input type="file" id="slipFileInput" accept="image/*,.pdf" style="display:none;" onchange="handleSlipFile(this)">
+        </label>
+
+        <div id="slipPreviewWrap" style="display:none;margin-bottom:16px;text-align:center;">
+          <img id="slipPreviewImg" src="" style="max-height:160px;border-radius:6px;margin:0 auto;border:1px solid var(--border-light);" alt="Payment Slip Preview">
+        </div>
+
+        <!-- Buyer WhatsApp -->
+        <div class="form-group">
+          <label class="form-label">Your WhatsApp Number (For Account Delivery)</label>
+          <input type="tel" id="buyerWhatsApp" class="form-control" placeholder="e.g. 0771234567">
+        </div>
+
+        <button class="btn-garena-proceed" style="width:100%;justify-content:center;padding:14px;font-size:1rem;" onclick="submitOrderWhatsApp()">
+          <i data-lucide="send"></i> Confirm Order &amp; Send Slip on WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SELL YOUR ACCOUNT MODAL -->
+  <div id="sellModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'sellModal')">
+    <div class="modal-box" style="max-width:580px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="dollar-sign" style="color:var(--gold-accent);"></i> Sell Your Account
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('sellModal')">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size:0.84rem;color:#4b5563;margin-bottom:14px;">
+          Submit your account details below. Our admin team will contact you on WhatsApp with a cash offer within 15 minutes.
+        </p>
+
+        <form id="sellAccountForm" onsubmit="handleSellSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">Select Account Category</label>
+            <div class="sell-cat-grid">
+              <div class="sell-cat-tile active" onclick="selectSellCategory(this, 'Free Fire')">
+                <div class="sell-cat-icon">
+                  <img src="ff_icon.jpg" alt="Free Fire">
+                </div>
+                <span>Free Fire</span>
+              </div>
+              <div class="sell-cat-tile" onclick="selectSellCategory(this, 'CapCut Pro')">
+                <div class="sell-cat-icon">
+                  <img src="capcut_icon.jpg" alt="CapCut Pro" style="padding:2px;background:#ffffff;">
+                </div>
+                <span>CapCut Pro</span>
+              </div>
+              <div class="sell-cat-tile" onclick="selectSellCategory(this, 'TikTok')">
+                <div class="sell-cat-icon">
+                  <img src="tiktok_icon.jpg" alt="TikTok">
+                </div>
+                <span>TikTok</span>
+              </div>
+              <div class="sell-cat-tile" onclick="selectSellCategory(this, 'YouTube')">
+                <div class="sell-cat-icon">
+                  <img src="youtube_icon.jpg" alt="YouTube" style="padding:2px;background:#ffffff;">
+                </div>
+                <span>YouTube</span>
+              </div>
+            </div>
+            <input type="hidden" id="sellCategory" value="Free Fire">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Account Highlights / Level / Followers</label>
+            <input type="text" id="sellTitle" class="form-control" placeholder="e.g. Level 74 Master, 5 EVO Guns MAX" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Key Features &amp; Bundles</label>
+            <textarea id="sellDetails" class="form-control" placeholder="Describe EVO guns, rare bundles, TikTok monetization, strikes..." required></textarea>
+          </div>
+
+          <!-- Account Collage Attachment (1 Photo) -->
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;">
+              <span style="display:flex;align-items:center;gap:6px;">
+                <i data-lucide="image" style="width:14px;height:14px;color:var(--garena-red);"></i> Account Collage
+              </span>
+              <span style="font-size:0.68rem;font-weight:700;color:#64748b;">(Maximum 1)</span>
+            </label>
+            <label for="sellPhotoInput" class="upload-dropzone" id="sellPhotoDropzone" style="padding:14px;border:1.5px dashed #cbd5e1;border-radius:8px;text-align:center;cursor:pointer;background:#f8fafc;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all 0.2s ease;">
+              <div style="width:36px;height:36px;border-radius:50%;background:#fee2e2;color:var(--garena-red);display:flex;align-items:center;justify-content:center;">
+                <i data-lucide="camera" style="width:18px;height:18px;"></i>
+              </div>
+              <div style="font-size:0.82rem;font-weight:700;color:#0f172a;" id="sellPhotoName">Click to attach account collage</div>
+              <div style="font-size:0.7rem;color:#64748b;">Supports JPG, PNG, WebP (Max 10MB)</div>
+              <input type="file" id="sellPhotoInput" accept="image/*" style="display:none;" onchange="handleSellPhotoUpload(this)">
+            </label>
+            <div id="sellPhotoPreviewWrap" style="display:none;margin-top:8px;position:relative;border-radius:8px;overflow:hidden;border:1.5px solid #e2e8f0;background:#0f172a;max-height:160px;text-align:center;">
+              <img id="sellPhotoPreviewImg" src="" style="max-height:160px;width:100%;object-fit:contain;display:block;" alt="Attached Collage">
+              <button type="button" onclick="removeSellPhoto()" style="position:absolute;top:6px;right:6px;background:rgba(220,38,38,0.9);color:#fff;border:none;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+                <i data-lucide="x" style="width:14px;height:14px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Expected Price (LKR)</label>
+            <input type="number" id="sellPrice" class="form-control" placeholder="e.g. 35000" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;">
+              <span>Contact WhatsApp Number</span>
+              <span style="font-size:0.68rem;font-weight:700;color:var(--garena-red);">10 Digits Required</span>
+            </label>
+            <input type="tel" id="sellPhone" class="form-control" placeholder="07XXXXXXXX" required maxlength="10" minlength="10" pattern="0[0-9]{9}" title="Please enter a valid 10-digit Sri Lankan phone number starting with 0 (e.g. 0771234567)">
+          </div>
+
+          <button type="submit" class="btn-garena-proceed" style="width:100%;justify-content:center;margin-top:10px;">
+            <i data-lucide="send"></i> Submit Account to Admin via WhatsApp
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.5. ADMIN PORTAL SECURITY VERIFICATION MODAL -->
+  <div id="adminAuthModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'adminAuthModal')">
+    <div class="modal-box" style="max-width:440px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="shield-alert" style="color:var(--garena-red);"></i> Admin Security Portal
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('adminAuthModal')">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Store Identity Badge -->
+        <div style="background:#0f172a;border-radius:10px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;border:1px solid #1e293b;">
+          <div style="width:42px;height:42px;border-radius:8px;overflow:hidden;border:2px solid var(--garena-red);box-shadow:0 2px 8px rgba(216,26,13,0.4);flex-shrink:0;">
+            <img src="ff_icon.jpg" alt="NUR STORE" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:1.15rem;font-weight:900;color:#ffffff;line-height:1.1;">NUR STORE</div>
+            <div style="font-size:0.72rem;color:#94a3b8;display:flex;align-items:center;gap:5px;margin-top:2px;">
+              <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#10b981;"></span>
+              Restricted Area • Authorized Email Required
+            </div>
+          </div>
+        </div>
+
+        <form id="adminAuthForm" onsubmit="handleAdminAuthSubmit(event)">
+          <div class="form-group" style="margin-bottom:14px;">
+            <label class="form-label" style="display:flex;align-items:center;gap:6px;font-size:0.78rem;">
+              <i data-lucide="mail" style="width:13px;height:13px;color:var(--garena-red);"></i> Admin Email Address
+            </label>
+            <input type="email" id="adminAuthEmailInput" class="form-control" placeholder="Enter authorized admin email..." required autofocus>
+          </div>
+
+          <div class="form-group" style="margin-bottom:18px;">
+            <label class="form-label" style="display:flex;align-items:center;gap:6px;font-size:0.78rem;">
+              <i data-lucide="key" style="width:13px;height:13px;color:#64748b;"></i> Security Access PIN
+            </label>
+            <div style="position:relative;display:flex;align-items:center;">
+              <input type="password" id="adminAuthPinInput" class="form-control" placeholder="Enter security PIN..." required maxlength="12" style="padding-right:42px;">
+              <button type="button" onclick="toggleAdminPinVisibility()" id="btnTogglePinVis" style="position:absolute;right:8px;background:none;border:none;color:#64748b;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;" title="Show / Hide PIN">
+                <i data-lucide="eye" id="pinEyeIcon" style="width:16px;height:16px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;">
+            <button type="submit" class="btn-garena-proceed" style="flex:1;justify-content:center;padding:12px;font-size:0.88rem;">
+              <i data-lucide="shield-check"></i> Unlock Dashboard
+            </button>
+            <button type="button" class="btn-reset-filter" style="padding:12px 16px;" onclick="closeModal('adminAuthModal')">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. STORE ADMIN DASHBOARD MODAL -->
+  <div id="adminModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'adminModal')">
+    <div class="modal-box" style="max-width:940px;">
+      <div class="modal-header">
+        <div class="modal-title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <i data-lucide="layout-dashboard" style="color:var(--garena-red);"></i> Inventory &amp; Listing Management
+          </div>
+          <span id="adminActiveUserBadge" style="font-size:0.72rem;font-weight:700;background:#dcfce7;color:#166534;padding:3px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px;">
+            <i data-lucide="shield-check" style="width:12px;height:12px;"></i> Authenticated Admin
+          </span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <button class="btn-reset-filter" style="padding:4px 10px;font-size:0.75rem;color:#dc2626;" onclick="handleAdminLogout()" title="Logout of Admin Session">
+            <i data-lucide="log-out" style="width:13px;height:13px;"></i> Logout
+          </button>
+          <button class="modal-close-btn" onclick="closeModal('adminModal')">
+            <i data-lucide="x" style="width:16px;height:16px;"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <!-- Main Top Navigation Tabs -->
+        <div class="admin-main-tabs">
+          <button type="button" class="admin-main-tab active" id="tabBtnAdminInventory" onclick="switchAdminMainTab('inventory')">
+            <i data-lucide="package" style="width:16px;height:16px;"></i> Account Listings &amp; Inventory
+          </button>
+          <button type="button" class="admin-main-tab" id="tabBtnAdminBanners" onclick="switchAdminMainTab('banners')">
+            <i data-lucide="image" style="width:16px;height:16px;"></i> Hero Banners &amp; Slider
+          </button>
+          <button type="button" class="admin-main-tab" id="tabBtnAdminAccess" onclick="switchAdminMainTab('access')">
+            <i data-lucide="shield-check" style="width:16px;height:16px;"></i> Admin Access &amp; Team
+          </button>
+        </div>
+
+        <!-- TAB PANE 1: ACCOUNT INVENTORY & LISTINGS -->
+        <div id="adminPaneInventory" class="admin-tab-pane active">
+          <!-- 1. KPI Summary Cards -->
+          <div class="admin-kpi-grid" id="adminKpiContainer">
+            <!-- Populated by app.js -->
+          </div>
+
+          <!-- 2. Action Toolbar -->
+          <div class="admin-toolbar">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+              <div class="admin-search-box">
+                <i data-lucide="search" style="width:14px;height:14px;color:#94a3b8;"></i>
+                <input type="text" id="adminSearchInput" placeholder="Filter code, title..." oninput="handleAdminSearch(this.value)">
+              </div>
+              <div class="denom-filter-tabs" style="margin:0;">
+                <button class="denom-tab active" id="adminTabAll" onclick="filterAdminCat('all')">All</button>
+                <button class="denom-tab" id="adminTabFF" onclick="filterAdminCat('freefire')">Free Fire</button>
+                <button class="denom-tab" id="adminTabCC" onclick="filterAdminCat('capcut')">CapCut</button>
+                <button class="denom-tab" id="adminTabTT" onclick="filterAdminCat('tiktok')">TikTok</button>
+                <button class="denom-tab" id="adminTabYT" onclick="filterAdminCat('youtube')">YouTube</button>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="btn-garena-proceed" style="padding:7px 14px;font-size:0.78rem;" onclick="toggleAddNewAccountForm()">
+                <i data-lucide="plus-circle" style="width:15px;height:15px;"></i> Add Listing
+              </button>
+            </div>
+          </div>
+
+          <!-- Add / Edit Account Form -->
+          <div id="addNewAccountFormWrap" style="display:none;background:#ffffff;border:2px solid #cbd5e1;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 10px 25px rgba(0,0,0,0.08);">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e2e8f0;">
+              <h4 id="adminFormHeaderTitle" style="font-size:1.05rem;font-weight:900;color:#0f172a;margin:0;display:flex;align-items:center;gap:8px;">
+                <i data-lucide="plus-circle" style="width:18px;height:18px;color:var(--garena-red);"></i> Add New Account Listing
+              </h4>
+              <button type="button" class="btn-reset-filter" style="padding:4px 10px;font-size:0.75rem;" onclick="toggleAddNewAccountForm()">
+                <i data-lucide="x" style="width:13px;height:13px;"></i> Close Form
+              </button>
+            </div>
+
+            <form id="newAccountForm" onsubmit="handleAdminAddNew(event)">
+              <input type="hidden" id="adminEditAccountId" value="">
+
+              <!-- Row 1: Category, Account Code, Listing Status -->
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;">
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="layers" style="width:13px;height:13px;color:var(--garena-red);"></i> Category
+                  </label>
+                  <select id="adminNewCat" class="form-control" required onchange="handleAdminCatChange(this.value)" style="font-weight:700;">
+                    <option value="freefire">Free Fire Account</option>
+                    <option value="capcut">CapCut Pro Account</option>
+                    <option value="tiktok">TikTok Creator Account</option>
+                    <option value="youtube">YouTube Channel Account</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span style="display:flex;align-items:center;gap:6px;">
+                      <i data-lucide="tag" style="width:13px;height:13px;color:#64748b;"></i> Account Code
+                    </span>
+                    <span style="font-size:0.65rem;font-weight:800;color:#16a34a;background:#dcfce7;padding:2px 8px;border-radius:10px;">Auto-Generated</span>
+                  </label>
+                  <div style="position:relative;display:flex;align-items:center;">
+                    <input type="text" id="adminNewCode" class="form-control" placeholder="e.g. FF-105" required style="font-family:'Rajdhani',sans-serif;font-weight:800;font-size:0.95rem;letter-spacing:0.5px;padding-right:36px;">
+                    <button type="button" onclick="refreshAdminAutoCode()" style="position:absolute;right:6px;background:none;border:none;color:#64748b;cursor:pointer;padding:6px;display:flex;align-items:center;justify-content:center;" title="Regenerate next available code">
+                      <i data-lucide="rotate-ccw" style="width:14px;height:14px;"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="activity" style="width:13px;height:13px;color:#64748b;"></i> Listing Status
+                  </label>
+                  <select id="adminNewStatus" class="form-control" style="font-weight:700;">
+                    <option value="available">Available (Live)</option>
+                    <option value="sale">Hot Sale (Special Offer)</option>
+                    <option value="sold">Sold Out (Archived)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Row 2: Title & VIP Grand Prize Toggle -->
+              <div style="display:grid;grid-template-columns:3fr 1fr;gap:14px;margin-bottom:14px;">
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="type" style="width:13px;height:13px;color:#64748b;"></i> Listing Title &amp; Highlights
+                  </label>
+                  <input type="text" id="adminNewTitle" class="form-control" placeholder="e.g. Level 72 • 8 EVO Guns • Master Rank • Criminal Bundle" required>
+                </div>
+
+                <div class="form-group" style="margin:0;display:flex;flex-direction:column;justify-content:flex-end;">
+                  <label style="display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:0.82rem;font-weight:800;color:#92400e;background:#fffbeb;border:1.5px solid #fde68a;height:42px;padding:0 12px;border-radius:6px;transition:all 0.2s ease;">
+                    <input type="checkbox" id="adminNewGrandPrize" style="width:16px;height:16px;accent-color:#d97706;cursor:pointer;">
+                    <span style="display:inline-flex;align-items:center;gap:4px;">
+                      <i data-lucide="crown" style="width:15px;height:15px;color:#d97706;"></i> VIP Grand Prize
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Row 3: Pricing -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="dollar-sign" style="width:13px;height:13px;color:#16a34a;"></i> Selling Price (LKR)
+                  </label>
+                  <input type="number" id="adminNewPrice" class="form-control" placeholder="e.g. 24500" required style="font-family:'Rajdhani',sans-serif;font-weight:800;font-size:0.95rem;">
+                </div>
+                <div class="form-group" style="margin:0;">
+                  <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="trending-down" style="width:13px;height:13px;color:#94a3b8;"></i> Original Price (LKR - Strikethrough) [Optional]
+                  </label>
+                  <input type="number" id="adminNewOrigPrice" class="form-control" placeholder="e.g. 32000" style="font-family:'Rajdhani',sans-serif;font-weight:800;font-size:0.95rem;">
+                </div>
+              </div>
+
+              <!-- Row 4: Photos (Direct Upload or Link) -->
+              <div class="form-group" style="margin-bottom:14px;">
+                <label class="form-label" style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;">
+                  <span style="display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="image" style="width:13px;height:13px;color:#64748b;"></i> Account Photos (Direct Upload or Link)
+                  </span>
+                  <span style="font-size:0.7rem;font-weight:800;color:#dc2626;background:#fee2e2;padding:2px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:4px;">
+                    <i data-lucide="alert-circle" style="width:11px;height:11px;"></i> Photo Required
+                  </span>
+                </label>
+
+                <!-- Direct Upload Dropzone & Clear Button for Admin -->
+                <div style="margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <label style="display:inline-flex;align-items:center;gap:6px;background:#f8fafc;border:1.5px dashed #cbd5e1;padding:8px 14px;border-radius:8px;cursor:pointer;font-size:0.8rem;font-weight:700;color:#334155;transition:all 0.2s;">
+                    <i data-lucide="upload-cloud" style="width:15px;height:15px;color:var(--garena-red);"></i> Direct Upload Photos (Click / Drop)
+                    <input type="file" id="adminPhotoFileInput" multiple accept="image/*" style="display:none;" onchange="handleAdminDirectPhotoUpload(this)">
+                  </label>
+                  <button type="button" onclick="clearAllAdminPhotos()" style="background:#fee2e2;color:#dc2626;border:1px solid #fecaca;padding:7px 12px;border-radius:8px;font-size:0.78rem;font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer;transition:all 0.2s;">
+                    <i data-lucide="trash-2" style="width:13px;height:13px;"></i> Clear All Photos
+                  </button>
+                  <span id="adminPhotoFileCount" style="font-size:0.74rem;color:#64748b;"></span>
+                </div>
+
+                <input type="text" id="adminNewImages" class="form-control" placeholder="Paste image Link or Google Drive link (Optional if Direct Upload is used)" value="" oninput="renderAdminFormImagePreviews()">
+                <div style="font-size:0.72rem;color:#64748b;margin-top:5px;display:flex;align-items:center;gap:5px;">
+                  <i data-lucide="info" style="width:13px;height:13px;color:#0284c7;flex-shrink:0;"></i>
+                  <span>Upload photos using the Direct Upload button above or paste image URLs.</span>
+                </div>
+
+                <!-- Live Preview Thumbnails Container in Admin Form -->
+                <div id="adminFormImagePreviews" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;"></div>
+              </div>
+
+              <!-- DYNAMIC CATEGORY SPECS SECTIONS -->
+
+              <!-- A. Free Fire Specifications -->
+              <div id="adminStatsFF" style="background:#ffffff;border:1.5px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:0.92rem;font-weight:900;color:var(--garena-red);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="flame" style="width:16px;height:16px;"></i> Free Fire Account Specifications
+                </div>
+
+                <!-- Subsection 1: Profile & Identity -->
+                <div style="background:#fff5f5;border:1px solid #fee2e2;border-radius:8px;padding:12px;margin-bottom:12px;">
+                  <div style="font-size:0.72rem;font-weight:800;color:#991b1b;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.5px;">
+                    1. Profile &amp; Ranking
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(4, 1fr);gap:10px;">
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Level</label>
+                      <input type="text" id="ffStatLevel" class="form-control" placeholder="e.g. 72">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Rank</label>
+                      <input type="text" id="ffStatRank" class="form-control" placeholder="e.g. Master / GM">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Likes</label>
+                      <input type="text" id="ffStatLikes" class="form-control" placeholder="e.g. 18,200+">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">UID</label>
+                      <input type="text" id="ffStatUID" class="form-control" placeholder="e.g. 2481048291">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subsection 2: Collection & Badges -->
+                <div style="background:#fff5f5;border:1px solid #fee2e2;border-radius:8px;padding:12px;margin-bottom:12px;">
+                  <div style="font-size:0.72rem;font-weight:800;color:#991b1b;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.5px;">
+                    2. Collection &amp; Badges
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:10px;">
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Bundles Count</label>
+                      <input type="text" id="ffStatBundles" class="form-control" placeholder="e.g. 380+">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Gun Skins Count</label>
+                      <input type="text" id="ffStatGunSkins" class="form-control" placeholder="e.g. 410+">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;display:flex;align-items:center;gap:4px;">
+                        <i data-lucide="crown" style="width:12px;height:12px;color:#9333ea;"></i> Prime Level (Max 8)
+                      </label>
+                      <select id="ffStatPrime" class="form-control" style="font-size:0.78rem;font-weight:700;">
+                        <option value="">None / No Prime</option>
+                        <option value="Prime Level 8">Prime Level 8</option>
+                        <option value="Prime Level 7">Prime Level 7</option>
+                        <option value="Prime Level 6">Prime Level 6</option>
+                        <option value="Prime Level 5">Prime Level 5</option>
+                        <option value="Prime Level 4">Prime Level 4</option>
+                        <option value="Prime Level 3">Prime Level 3</option>
+                        <option value="Prime Level 2">Prime Level 2</option>
+                        <option value="Prime Level 1">Prime Level 1</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subsection 3: Access & Region -->
+                <div style="background:#fff5f5;border:1px solid #fee2e2;border-radius:8px;padding:12px;margin-bottom:12px;">
+                  <div style="font-size:0.72rem;font-weight:800;color:#991b1b;text-transform:uppercase;margin-bottom:8px;letter-spacing:0.5px;">
+                    3. Access &amp; Server
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Login Type</label>
+                      <input type="text" id="ffStatLogin" class="form-control" placeholder="e.g. Facebook (Clean FB) / Gmail">
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                      <label class="form-label" style="font-size:0.72rem;">Region / Server</label>
+                      <input type="text" id="ffStatRegion" class="form-control" placeholder="e.g. Sri Lanka / SG Server">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subsection 4: Interactive 1-Click EVO Weapons Arsenal Builder -->
+                <div style="background:#fff7ed;border:1.5px solid #fed7aa;border-radius:10px;padding:14px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
+                    <div style="font-size:0.85rem;font-weight:900;color:#9a3412;display:flex;align-items:center;gap:6px;">
+                      <i data-lucide="sparkles" style="width:15px;height:15px;color:#ea580c;"></i> EVO Weapons Arsenal Builder
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <span id="evoCountBadge" style="background:#ea580c;color:#ffffff;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:12px;">0 EVO Guns</span>
+                      <span id="evoMaxBadge" style="background:#dc2626;color:#ffffff;font-size:0.7rem;font-weight:800;padding:2px 8px;border-radius:12px;">0 Maxed</span>
+                    </div>
+                  </div>
+
+                  <!-- Fast Gun & Level Picker Row -->
+                  <div style="display:grid;grid-template-columns:2fr 1fr auto;gap:8px;margin-bottom:12px;">
+                    <div>
+                      <select id="evoGunPickerSelect" class="form-control" onchange="handleEvoPickerChange(this.value)">
+                        <option value="">-- Choose EVO Gun --</option>
+                        <option value="AK47 Blue Flame Draco">AK47 Blue Flame Draco</option>
+                        <option value="MP40 Predatory Cobra">MP40 Predatory Cobra</option>
+                        <option value="M1014 Green Flame Draco">M1014 Green Flame Draco</option>
+                        <option value="SCAR Megalodon Alpha">SCAR Megalodon Alpha</option>
+                        <option value="XM8 Destiny Guardian">XM8 Destiny Guardian</option>
+                        <option value="UMP Booyah Day">UMP Booyah Day</option>
+                        <option value="M1887 Sterling Conqueror">M1887 Sterling Conqueror</option>
+                        <option value="FAMAS Demonic Grin">FAMAS Demonic Grin</option>
+                        <option value="AN94 Evil Howler">AN94 Evil Howler</option>
+                        <option value="MP5 Platinum Divinity">MP5 Platinum Divinity</option>
+                        <option value="Thompson Cindered Colossus">Thompson Cindered Colossus</option>
+                        <option value="M4A1 Infernal Draco">M4A1 Infernal Draco</option>
+                        <option value="Groza Bang Pop Blaster">Groza Bang Pop Blaster</option>
+                        <option value="Woodpecker Majestic Prowler">Woodpecker Majestic Prowler</option>
+                        <option value="G18 Lava">G18 Lava</option>
+                        <option value="CUSTOM">+ Enter Custom Gun Name...</option>
+                      </select>
+                      <input type="text" id="evoCustomGunNameInput" class="form-control" placeholder="Type custom gun name..." style="display:none;margin-top:6px;">
+                    </div>
+
+                    <div>
+                      <select id="evoLevelPickerSelect" class="form-control">
+                        <option value="Lv 8 (MAX)">Lv 8 (MAX)</option>
+                        <option value="Lv 7 (MAX)" selected>Lv 7 (MAX)</option>
+                        <option value="Lv 7">Lv 7</option>
+                        <option value="Lv 6">Lv 6</option>
+                        <option value="Lv 5">Lv 5</option>
+                        <option value="Lv 4">Lv 4</option>
+                        <option value="Lv 3">Lv 3</option>
+                        <option value="Lv 2">Lv 2</option>
+                        <option value="Lv 1">Lv 1</option>
+                      </select>
+                    </div>
+
+                    <button type="button" class="btn-garena-proceed" style="padding:6px 14px;font-size:0.78rem;" onclick="addEvoWeaponChip()">
+                      <i data-lucide="plus" style="width:14px;height:14px;"></i> Add Gun
+                    </button>
+                  </div>
+
+                  <!-- Chips Container -->
+                  <div id="evoArsenalChipsContainer" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:8px;min-height:40px;">
+                    <!-- Dynamically populated chips -->
+                  </div>
+
+                  <!-- Hidden inputs to store calculated counts for submission -->
+                  <input type="hidden" id="ffStatEvoGuns" value="0">
+                  <input type="hidden" id="ffStatEvoMax" value="0">
+                </div>
+              </div>
+
+              <!-- B. CapCut Pro Specifications (Clean Balanced 3x2 Grid) -->
+              <div id="adminStatsCC" style="display:none;background:#f8fafc;border:1.5px solid #e0e7ff;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:0.92rem;font-weight:900;color:#3730a3;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="video" style="width:16px;height:16px;color:#4f46e5;"></i> CapCut Pro Account Specifications
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;">
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Plan Duration</label>
+                    <input type="text" id="ccStatPlan" class="form-control" placeholder="e.g. 1-Year VIP / Lifetime">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Supported Devices</label>
+                    <input type="text" id="ccStatDevices" class="form-control" placeholder="e.g. PC / iOS / Android">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Cloud Storage</label>
+                    <input type="text" id="ccStatStorage" class="form-control" placeholder="e.g. 100GB Cloud Active">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Account Type</label>
+                    <input type="text" id="ccStatAccType" class="form-control" placeholder="e.g. Private Email Login">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Warranty</label>
+                    <input type="text" id="ccStatWarranty" class="form-control" placeholder="e.g. 1-Year Full Warranty">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Delivery Speed</label>
+                    <input type="text" id="ccStatDelivery" class="form-control" placeholder="e.g. Instant (5 Mins)">
+                  </div>
+                </div>
+              </div>
+
+              <!-- C. TikTok Creator Specifications (Clean Balanced 3x2 Grid) -->
+              <div id="adminStatsTT" style="display:none;background:#fdf2f8;border:1.5px solid #fbcfe8;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:0.92rem;font-weight:900;color:#9d174d;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="music" style="width:16px;height:16px;color:#db2777;"></i> TikTok Account Specifications
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;">
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Followers Count</label>
+                    <input type="text" id="ttStatFollowers" class="form-control" placeholder="e.g. 125,000+">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Monetization Status</label>
+                    <input type="text" id="ttStatMonetization" class="form-control" placeholder="e.g. Creator Rewards Active">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Content Niche</label>
+                    <input type="text" id="ttStatNiche" class="form-control" placeholder="e.g. Gaming / Anime">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Target Region</label>
+                    <input type="text" id="ttStatRegion" class="form-control" placeholder="e.g. USA / UK Traffic">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Account Strikes</label>
+                    <input type="text" id="ttStatStrikes" class="form-control" placeholder="e.g. 0 Strikes (Clean)">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Audience Demographics</label>
+                    <input type="text" id="ttStatAudience" class="form-control" placeholder="e.g. 92% US/UK Traffic">
+                  </div>
+                </div>
+              </div>
+
+              <!-- D. YouTube Channel Specifications (Clean Balanced 3x2 Grid) -->
+              <div id="adminStatsYT" style="display:none;background:#fef2f2;border:1.5px solid #fecaca;border-radius:12px;padding:16px;margin-bottom:16px;">
+                <div style="font-size:0.92rem;font-weight:900;color:#991b1b;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="play-square" style="width:16px;height:16px;color:#dc2626;"></i> YouTube Channel Specifications
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:12px;">
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Subscribers Count</label>
+                    <input type="text" id="ytStatSubscribers" class="form-control" placeholder="e.g. 125,000+ Subs">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Monetization Status</label>
+                    <select id="ytStatMonetization" class="form-control">
+                      <option value="Monetized (AdSense Active)">Monetized (AdSense Active)</option>
+                      <option value="4K Watch Hours / YPP Ready">4K Watch Hours / YPP Ready</option>
+                      <option value="Shorts Monetization Active">Shorts Monetization Active</option>
+                      <option value="Non-Monetized Organic">Non-Monetized Organic</option>
+                    </select>
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Watch Hours</label>
+                    <input type="text" id="ytStatWatchHours" class="form-control" placeholder="e.g. 85,000+ Hours">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Channel Niche / Topic</label>
+                    <input type="text" id="ytStatNiche" class="form-control" placeholder="e.g. Gaming / Free Fire / Tech">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Account Strikes</label>
+                    <input type="text" id="ytStatStrikes" class="form-control" placeholder="e.g. 0 Strikes (Clean Record)">
+                  </div>
+                  <div class="form-group" style="margin:0;">
+                    <label class="form-label" style="font-size:0.75rem;">Transfer Method</label>
+                    <input type="text" id="ytStatDelivery" class="form-control" placeholder="e.g. Primary Owner Handover">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="form-group" style="margin-bottom:16px;">
+                <label class="form-label" style="display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="align-left" style="width:13px;height:13px;color:#64748b;"></i> Account Description &amp; Handover Notes
+                </label>
+                <textarea id="adminNewDesc" class="form-control" style="min-height:75px;" placeholder="Full details, login access, recovery email guarantees..."></textarea>
+              </div>
+
+              <!-- Submit Buttons -->
+              <div style="display:flex;gap:12px;">
+                <button type="submit" class="btn-garena-proceed" style="flex:1;justify-content:center;padding:12px;font-size:0.92rem;" id="adminFormSubmitBtn">
+                  <i data-lucide="check-circle"></i> Save Account Listing
+                </button>
+                <button type="button" class="btn-reset-filter" style="padding:12px 20px;" onclick="toggleAddNewAccountForm()">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- 3. Luxury Inventory Table -->
+          <div class="admin-table-wrap">
+            <div style="overflow-x:auto;">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width:100px;">Code</th>
+                    <th>Account Listing</th>
+                    <th style="width:120px;">Category</th>
+                    <th style="width:130px;">Price (LKR)</th>
+                    <th style="width:130px;">Status</th>
+                    <th style="width:90px;text-align:right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminInventoryTableBody">
+                  <!-- Rendered by app.js -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANE 2: HERO BANNERS & SLIDER MANAGEMENT -->
+        <div id="adminPaneBanners" class="admin-tab-pane">
+          
+          <!-- Banner Manager Header Banner -->
+          <div style="background: linear-gradient(135deg, #111827 0%, #1e1b4b 100%); color:#fff; border-radius:12px; padding:18px 20px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1px solid #374151;">
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div style="width:46px; height:46px; border-radius:10px; background:rgba(216,26,13,0.15); border:1.5px solid var(--garena-red); display:flex; align-items:center; justify-content:center; color:#ef4444; flex-shrink:0;">
+                <i data-lucide="image" style="width:24px; height:24px;"></i>
+              </div>
+              <div>
+                <h4 style="font-size:1.1rem; font-weight:900; font-family:'Rajdhani',sans-serif; color:#fff; margin:0;">
+                  Hero Carousel &amp; Promo Banner Manager
+                </h4>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+                  Upload custom photos, arrange slider sequence, and manage live homepage promotions.
+                </div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button type="button" class="btn-garena-proceed" style="padding:7px 14px; font-size:0.78rem; background:var(--garena-red); border-color:var(--garena-red);" onclick="openAddBannerForm()">
+                <i data-lucide="plus-circle" style="width:15px; height:15px;"></i> Add New Slide / Banner
+              </button>
+              <button type="button" class="btn-reset-filter" style="padding:7px 12px; font-size:0.78rem; background:#1f2937; color:#e5e7eb; border:1px solid #374151;" onclick="resetHeroBannersToDefault()" title="Reset to default banners">
+                <i data-lucide="rotate-ccw" style="width:13px; height:13px;"></i> Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Banner Aspect Ratio / Size Recommendations Alert Card -->
+          <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:10px; padding:12px 16px; margin-bottom:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <i data-lucide="sparkles" style="width:20px; height:20px; color:#16a34a; flex-shrink:0;"></i>
+              <div style="font-size:0.8rem; color:#166534;">
+                <strong>Recommended Image Size:</strong> <b>1360 × 370 px</b> (Aspect Ratio ~ 3.7:1) for ultra-sharp HD quality without cropping.
+              </div>
+            </div>
+            <span style="font-size:0.72rem; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 8px; border-radius:10px;">Retina HD 2X</span>
+          </div>
+
+          <!-- Add / Edit Banner Form (Hidden by default, shown when adding/editing) -->
+          <div id="adminBannerFormWrap" style="display:none; background:#ffffff; border:2px solid #cbd5e1; border-radius:12px; padding:20px; margin-bottom:20px; box-shadow:0 10px 25px rgba(0,0,0,0.08);">
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid #e2e8f0;">
+              <h4 id="adminBannerFormTitle" style="font-size:1.05rem; font-weight:900; color:#0f172a; margin:0; display:flex; align-items:center; gap:8px;">
+                <i data-lucide="plus-circle" style="width:18px; height:18px; color:var(--garena-red);"></i> Add New Hero Banner
+              </h4>
+              <button type="button" class="btn-reset-filter" style="padding:4px 10px; font-size:0.75rem;" onclick="closeBannerForm()">
+                <i data-lucide="x" style="width:13px; height:13px;"></i> Close Form
+              </button>
+            </div>
+
+            <form id="heroBannerForm" onsubmit="handleSaveHeroBanner(event)">
+              <input type="hidden" id="adminBannerEditId" value="">
+              
+              <div style="display:grid; grid-template-columns: 1.4fr 1fr; gap:16px; margin-bottom:16px;">
+                <!-- Left: Form inputs -->
+                <div>
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="type" style="width:13px; height:13px; color:var(--garena-red);"></i> Banner Title / Main Heading
+                    </label>
+                    <input type="text" id="adminBannerTitle" class="form-control" placeholder="e.g. NUR STORE - SG Region Verified Accounts" required oninput="updateBannerLivePreview()">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="align-left" style="width:13px; height:13px; color:#64748b;"></i> Subtitle / Promo Tagline
+                    </label>
+                    <input type="text" id="adminBannerSubtitle" class="form-control" placeholder="e.g. 100% Safe Recovery • Instant WhatsApp Delivery" oninput="updateBannerLivePreview()">
+                  </div>
+
+                  <!-- Direct Photo Upload from PC -->
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; justify-content:space-between;">
+                      <span style="display:flex; align-items:center; gap:6px;">
+                        <i data-lucide="upload" style="width:13px; height:13px; color:var(--garena-red);"></i> Upload Banner Photo (Device / PC)
+                      </span>
+                      <span id="adminBannerFileCount" style="font-size:0.72rem; color:#16a34a; font-weight:700;"></span>
+                    </label>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                      <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; background:#f8fafc; border:2px dashed #cbd5e1; border-radius:8px; padding:12px; cursor:pointer; transition:all 0.2s ease;">
+                        <i data-lucide="image-plus" style="width:20px; height:20px; color:var(--garena-red);"></i>
+                        <span style="font-size:0.82rem; font-weight:700; color:#334155;">Choose Photo from Computer / Phone</span>
+                        <input type="file" id="adminBannerFileInput" accept="image/*" style="display:none;" onchange="handleBannerFileUpload(this)">
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Or Paste Direct Image URL -->
+                  <div class="form-group">
+                    <label class="form-label" style="display:flex; align-items:center; gap:6px;">
+                      <i data-lucide="link" style="width:13px; height:13px; color:#64748b;"></i> Or Image File / URL (e.g. hero_banner.png)
+                    </label>
+                    <input type="text" id="adminBannerImageUrl" class="form-control" placeholder="hero_banner.png or https://..." oninput="updateBannerLivePreview()">
+                  </div>
+
+                  <div style="display:flex; align-items:center; gap:16px; margin-top:14px;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; font-weight:700; color:#0f172a;">
+                      <input type="checkbox" id="adminBannerActiveCheckbox" checked style="width:16px; height:16px; accent-color:var(--garena-red);">
+                      Active (Display in Slider)
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Right: Live Banner Preview -->
+                <div>
+                  <div class="form-label" style="margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                    <i data-lucide="eye" style="width:13px; height:13px; color:#64748b;"></i> Live Slider Preview
+                  </div>
+                  <div id="adminBannerPreviewBox" style="width:100%; height:130px; border-radius:10px; overflow:hidden; background:#0d0d0d; border:1.5px solid #e2e8f0; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.15); position:relative;">
+                    <img id="adminBannerPreviewImg" src="hero_banner.png" alt="Preview" style="width:100%; height:100%; object-fit:cover; display:block;">
+                  </div>
+                  <div style="font-size:0.7rem; color:#64748b; text-align:center; margin-top:6px;">
+                    Preview of how this banner appears in the 3D slider.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display:flex; align-items:center; justify-content:flex-end; gap:10px; padding-top:14px; border-top:1px solid #e2e8f0;">
+                <button type="button" class="btn-reset-filter" style="padding:8px 16px;" onclick="closeBannerForm()">Cancel</button>
+                <button type="submit" class="btn-garena-proceed" style="padding:8px 20px; font-size:0.85rem;">
+                  <i data-lucide="check-circle" style="width:16px; height:16px;"></i> Save Banner
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Banners Inventory Grid / List -->
+          <div id="adminBannersListContainer" style="display:grid; grid-template-columns:1fr; gap:12px;">
+            <!-- Populated dynamically by app.js -->
+          </div>
+
+        </div>
+
+        <!-- TAB PANE 3: ADMIN ACCESS & SECURITY CONTROL -->
+        <div id="adminPaneAccess" class="admin-tab-pane">
+          <!-- Store Master & Security Overview Banner -->
+          <div style="background:#0f172a;color:#fff;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #1e293b;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:46px;height:46px;border-radius:10px;overflow:hidden;border:2px solid var(--garena-red);box-shadow:0 4px 12px rgba(216,26,13,0.4);flex-shrink:0;">
+                <img src="ff_icon.jpg" alt="NUR STORE" style="width:100%;height:100%;object-fit:cover;">
+              </div>
+              <div>
+                <h4 style="font-size:1.1rem;font-weight:900;font-family:'Rajdhani',sans-serif;color:#fff;margin:0;">NUR STORE • Team &amp; Access Control</h4>
+                <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;">
+                  Military-Grade SHA-256 Zero-Knowledge Encrypted Security
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="background:#15803d;color:#ffffff;font-size:0.72rem;font-weight:800;padding:4px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px;">
+                <i data-lucide="lock" style="width:12px;height:12px;"></i> Protected
+              </span>
+            </div>
+          </div>
+
+          <!-- Secondary Admin Email Access Control Card -->
+          <div class="admin-access-card" style="margin-top:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+              <div>
+                <div style="font-size:0.95rem;font-weight:900;color:#0f172a;display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="users" style="width:16px;height:16px;color:var(--garena-red);"></i> Authorized Admin Accounts &amp; Team Members
+                </div>
+                <div style="font-size:0.75rem;color:#64748b;margin-top:2px;">
+                  Authorize secondary admin emails to allow trusted partners or staff to manage inventory.
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Secondary Admin Form -->
+            <form id="addSecondaryAdminForm" onsubmit="handleAddSecondaryAdmin(event)" style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+              <div style="flex:1;min-width:240px;">
+                <input type="email" id="newSecondaryAdminEmailInput" class="form-control" placeholder="Enter secondary admin email (e.g. partner@gmail.com)..." required>
+              </div>
+              <button type="submit" class="btn-garena-proceed" style="padding:9px 18px;font-size:0.82rem;white-space:nowrap;">
+                <i data-lucide="user-plus" style="width:15px;height:15px;"></i> Authorize Admin Email
+              </button>
+            </form>
+
+            <!-- Authorized Admins List -->
+            <div id="authorizedAdminsListContainer">
+              <!-- Rendered by app.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. CONTACT US & OFFICIAL SUPPORT MODAL -->
+  <div id="contactModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'contactModal')">
+    <div class="modal-box" style="max-width:620px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="headphones" style="color:var(--garena-red);"></i> Official Contact &amp; Customer Care
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('contactModal')">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Store Identity Card -->
+        <div style="background:#0f172a;color:#fff;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:48px;height:48px;border-radius:10px;overflow:hidden;border:2px solid var(--garena-red);box-shadow:0 4px 12px rgba(216,26,13,0.4);flex-shrink:0;">
+              <img src="ff_icon.jpg" alt="NUR STORE" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div>
+              <h3 style="font-size:1.15rem;font-weight:900;font-family:'Rajdhani',sans-serif;letter-spacing:0.5px;color:#fff;margin:0;">NUR STORE</h3>
+              <div style="font-size:0.75rem;color:#94a3b8;">Sri Lanka's Official Digital Account Seller</div>
+            </div>
+          </div>
+          <span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3);padding:4px 10px;border-radius:20px;font-size:0.72rem;font-weight:800;display:inline-flex;align-items:center;gap:6px;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;"></span> 24/7 Support Online
+          </span>
+        </div>
+
+        <!-- Contact Methods Grid -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:12px;margin-bottom:18px;">
+          <!-- Channel 1: WhatsApp Hotline -->
+          <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:38px;height:38px;border-radius:8px;overflow:hidden;padding:2px;background:#ffffff;border:1px solid #e2e8f0;flex-shrink:0;">
+                <img src="whatsapp_logo.jpg" alt="WhatsApp" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+              </div>
+              <div>
+                <div style="font-size:0.7rem;font-weight:700;color:#64748b;text-transform:uppercase;">WhatsApp Hotline</div>
+                <div style="font-size:0.92rem;font-weight:800;color:#0f172a;">+94 77 880 6366</div>
+              </div>
+            </div>
+            <a href="https://wa.me/94778806366" target="_blank" style="background:#25d366;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:0.75rem;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+              Chat <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+            </a>
+          </div>
+
+          <!-- Channel 2: Official WhatsApp Channel -->
+          <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:38px;height:38px;border-radius:8px;overflow:hidden;padding:2px;background:#ffffff;border:1px solid #e2e8f0;flex-shrink:0;">
+                <img src="whatsapp_logo.jpg" alt="WhatsApp Channel" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+              </div>
+              <div>
+                <div style="font-size:0.7rem;font-weight:700;color:#64748b;text-transform:uppercase;">WhatsApp Channel</div>
+                <div style="font-size:0.92rem;font-weight:800;color:#0f172a;">Daily Stock Alerts</div>
+              </div>
+            </div>
+            <a href="https://whatsapp.com/channel/0029Vb98CZlGehELY8cMRu2f" target="_blank" style="background:var(--garena-red);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:0.75rem;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+              Join <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+            </a>
+          </div>
+
+          <!-- Channel 2.5: Official WhatsApp Group -->
+          <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:38px;height:38px;border-radius:8px;overflow:hidden;padding:2px;background:#ffffff;border:1px solid #e2e8f0;flex-shrink:0;">
+                <img src="whatsapp_logo.jpg" alt="WhatsApp Group" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+              </div>
+              <div>
+                <div style="font-size:0.7rem;font-weight:700;color:#64748b;text-transform:uppercase;">WhatsApp Group</div>
+                <div style="font-size:0.92rem;font-weight:800;color:#0f172a;">Community Chat &amp; Buy/Sell</div>
+              </div>
+            </div>
+            <a href="https://chat.whatsapp.com/Ip3CpUR71Jd4LrZqqcB3Gx?s=cl&p=i&mlu=4" target="_blank" style="background:#0284c7;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:0.75rem;font-weight:800;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+              Join <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+            </a>
+          </div>
+
+          <!-- Channel 3: Operating Hours -->
+          <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:14px;display:flex;align-items:center;gap:10px;">
+            <div style="width:38px;height:38px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #dbeafe;">
+              <i data-lucide="clock" style="width:20px;height:20px;color:#1d4ed8;"></i>
+            </div>
+            <div>
+              <div style="font-size:0.7rem;font-weight:700;color:#64748b;text-transform:uppercase;">Working Hours</div>
+              <div style="font-size:0.85rem;font-weight:800;color:#0f172a;">24/7 Live Handover &amp; Support</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Direct Inquiry Message -->
+        <div style="background:#ffffff;border:1.5px solid #e2e8f0;border-radius:10px;padding:16px;">
+          <h4 style="font-size:0.88rem;font-weight:800;color:#111827;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+            <i data-lucide="send" style="width:14px;height:14px;color:var(--garena-red);"></i> Send Instant Message to Admin
+          </h4>
+          <form onsubmit="handleQuickContactSubmit(event)">
+            <div class="form-group" style="margin-bottom:10px;">
+              <input type="text" id="contactUserName" class="form-control" placeholder="Your Name / Player Nickname" required>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;">
+              <textarea id="contactUserMsg" class="form-control" style="min-height:70px;" placeholder="Type your inquiry (e.g. Account availability, price negotiation, warranty claim)..." required></textarea>
+            </div>
+            <button type="submit" class="btn-garena-proceed" style="width:100%;justify-content:center;">
+              <i data-lucide="message-circle"></i> Send Inquiry via WhatsApp
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. TERMS AND CONDITIONS MODAL -->
+  <div id="termsModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'termsModal')">
+    <div class="modal-box" style="max-width:640px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <i data-lucide="shield-alert" style="color:var(--garena-red);"></i> Terms &amp; Conditions
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('termsModal')">
+          <i data-lucide="x" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Safety Banner -->
+        <div style="background:#fef2f2;border:1.5px solid #fecaca;border-radius:10px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px;">
+          <div style="width:38px;height:38px;border-radius:8px;background:var(--garena-red);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i data-lucide="file-text" style="width:20px;height:20px;color:#fff;"></i>
+          </div>
+          <div>
+            <h4 style="font-size:0.92rem;font-weight:800;color:#991b1b;margin:0 0 2px 0;">Official Marketplace Policy</h4>
+            <p style="font-size:0.76rem;color:#7f1d1d;margin:0;line-height:1.4;">
+              Please review our official trading and payment protection terms prior to buying or submitting accounts.
+            </p>
+          </div>
+        </div>
+
+        <!-- 5 Terms Cards -->
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+          
+          <!-- Term 1 -->
+          <div style="background:#ffffff;border:1.5px solid #e5e7eb;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:#f3f4f6;color:var(--garena-red);font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+              1
+            </div>
+            <div>
+              <h5 style="font-size:0.88rem;font-weight:800;color:#111827;margin:0 0 3px 0;">Account Submission</h5>
+              <p style="font-size:0.8rem;color:#4b5563;margin:0;line-height:1.5;">
+                Account submission requires authorization for the transfer of the associated recovery email.
+              </p>
+            </div>
+          </div>
+
+          <!-- Term 2 -->
+          <div style="background:#ffffff;border:1.5px solid #e5e7eb;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:#f3f4f6;color:var(--garena-red);font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+              2
+            </div>
+            <div>
+              <h5 style="font-size:0.88rem;font-weight:800;color:#111827;margin:0 0 3px 0;">Payment Disbursement</h5>
+              <p style="font-size:0.8rem;color:#4b5563;margin:0;line-height:1.5;">
+                Owners will receive payment only after an administrator verifies that the buyer has confirmed the new recovery email.
+              </p>
+            </div>
+          </div>
+
+          <!-- Term 3 -->
+          <div style="background:#ffffff;border:1.5px solid #e5e7eb;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:#f3f4f6;color:var(--garena-red);font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+              3
+            </div>
+            <div>
+              <h5 style="font-size:0.88rem;font-weight:800;color:#111827;margin:0 0 3px 0;">No Exchange Policy</h5>
+              <p style="font-size:0.8rem;color:#4b5563;margin:0;line-height:1.5;">
+                All sales are final; once verified, no exchanges or refunds are permitted.
+              </p>
+            </div>
+          </div>
+
+          <!-- Term 4 -->
+          <div style="background:#ffffff;border:1.5px solid #e5e7eb;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:#f3f4f6;color:var(--garena-red);font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+              4
+            </div>
+            <div>
+              <h5 style="font-size:0.88rem;font-weight:800;color:#111827;margin:0 0 3px 0;">General Conditions</h5>
+              <p style="font-size:0.8rem;color:#4b5563;margin:0;line-height:1.5;">
+                Users must adhere to all guidelines, and any fraudulent activity will result in suspension and loss of payment eligibility.
+              </p>
+            </div>
+          </div>
+
+          <!-- Term 5 -->
+          <div style="background:#ffffff;border:1.5px solid #e5e7eb;border-radius:8px;padding:12px 14px;display:flex;align-items:flex-start;gap:12px;">
+            <div style="width:28px;height:28px;border-radius:6px;background:#f3f4f6;color:var(--garena-red);font-weight:900;font-size:0.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+              5
+            </div>
+            <div>
+              <h5 style="font-size:0.88rem;font-weight:800;color:#111827;margin:0 0 3px 0;">Receipt Confirmation</h5>
+              <p style="font-size:0.8rem;color:#4b5563;margin:0;line-height:1.5;">
+                Finally, owners must upload the transaction receipt to the platform to ensure fund disbursement.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <button class="btn-garena-proceed" style="width:100%;justify-content:center;" onclick="closeModal('termsModal')">
+          <i data-lucide="check-circle-2"></i> I Understand &amp; Agree
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. FULLSCREEN IMAGE LIGHTBOX -->
+  <div id="imageLightbox" class="lightbox-modal" onclick="closeLightbox()">
+    <img id="lightboxImage" class="lightbox-img" src="" alt="Account Zoom View">
+  </div>
+
+  <!-- 7. COMPACT CUSTOM CONFIRMATION DIALOG MODAL -->
+  <div id="customConfirmModal" class="modal-overlay" onclick="handleModalOutsideClick(event, 'customConfirmModal')" style="z-index:99999;">
+    <div class="modal-box" style="max-width:330px;text-align:center;padding:22px 18px;border-radius:12px;border:1px solid #fee2e2;box-shadow:0 12px 30px rgba(0,0,0,0.2);">
+      <div style="width:44px;height:44px;border-radius:50%;background:#fee2e2;color:#dc2626;display:flex;align-items:center;justify-content:center;margin:0 auto 12px auto;">
+        <i data-lucide="trash-2" id="confirmModalIcon" style="width:22px;height:22px;"></i>
+      </div>
+      <h3 id="confirmModalTitle" style="font-family:'Rajdhani',sans-serif;font-size:1.18rem;font-weight:900;color:#0f172a;margin-bottom:4px;line-height:1.2;">
+        Delete this listing?
+      </h3>
+      <p id="confirmModalDesc" style="font-size:0.78rem;color:#64748b;margin-bottom:18px;line-height:1.4;">
+        This action cannot be undone.
+      </p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;">
+        <button type="button" class="btn-garena-sec" onclick="closeConfirmModal(false)" style="padding:8px 16px;border-radius:8px;font-weight:700;flex:1;font-size:0.82rem;border:1px solid #cbd5e1;background:#f8fafc;color:#334155;">
+          Cancel
+        </button>
+        <button type="button" id="confirmModalActionBtn" class="btn-garena-proceed" style="background:#dc2626;border-color:#b91c1c;padding:8px 16px;border-radius:8px;font-weight:800;flex:1;justify-content:center;font-size:0.82rem;" onclick="executeConfirmAction()">
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. LIVE CHAT WIDGET -->
+  <button id="chat-fab" onclick="toggleChat()" aria-label="Open Live Chat">
+    <i data-lucide="message-circle" style="width:24px;height:24px;"></i>
+    <span class="chat-online-badge"></span>
+  </button>
+
+  <div id="chatWindow" class="chat-window">
+    <div class="chat-header">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="chat-bot-avatar">🔥</div>
+        <div>
+          <div style="font-weight:800;font-size:0.88rem;color:#fff;">NUR Support</div>
+          <div style="font-size:0.68rem;color:#bbf7d0;">Online • Instant Replies</div>
+        </div>
+      </div>
+      <button class="modal-close-btn" onclick="toggleChat()" style="background:transparent;color:#fff;border:none;">
+        <i data-lucide="minus" style="width:16px;height:16px;"></i>
+      </button>
+    </div>
+
+    <div class="chat-msgs-body" id="chatMessages">
+      <div class="chat-bubble bot">
+        Hello! 👋 Welcome to NUR STORE (Official Account Seller). How can we assist you with Free Fire, CapCut, or TikTok accounts today?
+        <div class="chat-prompts-row" style="margin-top:6px;">
+          <button class="chat-prompt-btn" onclick="sendQuickPrompt('How do I buy a Free Fire account?')">Buy FF Account?</button>
+          <button class="chat-prompt-btn" onclick="sendQuickPrompt('What payment methods do you accept?')">Payment Methods?</button>
+          <button class="chat-prompt-btn" onclick="sendQuickPrompt('What is the CapCut Pro warranty?')">CapCut Warranty?</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="handleChatKeyDown(event)">
+      <button class="btn-chat-send" onclick="sendChatMessage()">
+        <i data-lucide="send" style="width:14px;height:14px;"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
