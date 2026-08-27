@@ -511,3 +511,9 @@ const STORE_CONFIG = {
   usdRate: 310, // 1 USD = 310 LKR
   googleDriveWebhook: "https://script.google.com/macros/s/AKfycbyEGeIWyMHwopUN8Ggf6UrfqD-8ThUHk7cGz9I_70kJ2xSz9anZud1NyrOV7_OpXAluyg/exec"
 };
+
+// Supabase Realtime Cloud Database Configuration
+const SUPABASE_CONFIG = {
+  url: "https://nlhsufifscyilvoackxf.supabase.co",
+  anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5saHN1Zmlmc2N5aWx2b2Fja3hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4MTA2NDksImV4cCI6MjEwMzM4NjY0OX0.TbC_G1aYzwBwqx4AyeOWoRyRab8Zui3OZ60nr33QjPY"
+};

@@ -3712,3 +3712,60 @@ footer.site-footer {
     padding: 14px !important;
   }
 }
+
+/* =========================================================
+   12. ADMIN MAIN NAVIGATION TABS & SUPABASE CLOUD PANE
+   ========================================================= */
+.admin-main-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 18px;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.admin-main-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-main-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  padding: 8px 14px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+  border-radius: 6px 6px 0 0;
+}
+
+.admin-main-tab:hover {
+  color: var(--garena-red);
+  background: #fef2f2;
+}
+
+.admin-main-tab.active {
+  color: var(--garena-red);
+  border-bottom-color: var(--garena-red);
+  background: #fff;
+  font-weight: 900;
+}
+
+.admin-tab-pane {
+  display: none;
+}
+
+.admin-tab-pane.active {
+  display: block;
+  animation: fadeIn 0.2s ease-in-out;
+}

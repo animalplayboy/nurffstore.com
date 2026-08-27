@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHeroCarousel();
   initHeroCarousel();
   initLucide();
+  initSupabase();
 });
 
 // =========================================================
@@ -2355,6 +2356,7 @@ function handleAdminAddNew(e) {
         description: desc || "Premium verified account. Ready for immediate handover."
       };
       saveInventory();
+      syncAccountToSupabase(appState.accounts[accIndex]);
       renderCatalog();
       renderAdminInventory();
       toggleAddNewAccountForm(false);
@@ -2384,6 +2386,7 @@ function handleAdminAddNew(e) {
 
     appState.accounts.unshift(newAcc);
     saveInventory();
+    syncAccountToSupabase(newAcc);
     renderCatalog();
     renderAdminInventory();
     toggleAddNewAccountForm(false);
@@ -2494,6 +2497,7 @@ function adminDeleteAccount(accId) {
     onConfirm: () => {
       appState.accounts = appState.accounts.filter(a => a.id !== accId);
       saveInventory();
+      syncAccountToSupabase({ id: accId }, 'delete');
       renderCatalog();
       renderAdminInventory();
       showToast(`Listing ${accCode} deleted.`, "info");
@@ -2935,7 +2939,396 @@ function resetHeroBannersToDefault() {
       localStorage.removeItem('nexus_hero_banners');
       loadHeroBanners();
       saveHeroBanners();
+      syncHeroBannersToSupabase();
       showToast("Hero banners reset to original default pack!", "success");
     }
   });
+}
+
+// ==========================================================================
+// 11. SUPABASE REALTIME CLOUD DATABASE CONTROLLER
+// ==========================================================================
+
+let supabaseClient = null;
+
+const SUPABASE_DEFAULT_SQL = `-- 1. Create accounts table
+CREATE TABLE IF NOT EXISTS public.accounts (
+  id TEXT PRIMARY KEY,
+  category TEXT NOT NULL DEFAULT 'freefire',
+  title TEXT NOT NULL,
+  code TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'available',
+  is_grand_prize BOOLEAN DEFAULT false,
+  is_featured BOOLEAN DEFAULT false,
+  price_lkr NUMERIC NOT NULL,
+  orig_price_lkr NUMERIC,
+  images JSONB DEFAULT '[]'::jsonb,
+  stats JSONB DEFAULT '{}'::jsonb,
+  evo_list JSONB DEFAULT '[]'::jsonb,
+  description TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 2. Create hero_banners table
+CREATE TABLE IF NOT EXISTS public.hero_banners (
+  id TEXT PRIMARY KEY,
+  title TEXT,
+  subtitle TEXT,
+  description TEXT,
+  image TEXT,
+  type TEXT DEFAULT 'image',
+  active BOOLEAN DEFAULT true,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 3. Enable RLS & Policies safely
+ALTER TABLE public.accounts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.hero_banners ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read accounts" ON public.accounts;
+DROP POLICY IF EXISTS "Allow public all accounts" ON public.accounts;
+DROP POLICY IF EXISTS "Allow public read banners" ON public.hero_banners;
+DROP POLICY IF EXISTS "Allow public all banners" ON public.hero_banners;
+
+CREATE POLICY "Allow public all accounts" ON public.accounts FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all banners" ON public.hero_banners FOR ALL USING (true) WITH CHECK (true);
+
+-- 4. Enable Realtime
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'accounts') THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.accounts;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'hero_banners') THEN
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.hero_banners;
+  END IF;
+END $$;`;
+
+function getSupabaseCredentials() {
+  const localUrl = localStorage.getItem('nur_supabase_url');
+  const localKey = localStorage.getItem('nur_supabase_key');
+  const codeUrl = typeof SUPABASE_CONFIG !== 'undefined' ? SUPABASE_CONFIG.url : '';
+  const codeKey = typeof SUPABASE_CONFIG !== 'undefined' ? SUPABASE_CONFIG.anonKey : '';
+
+  return {
+    url: (localUrl || codeUrl || '').trim(),
+    anonKey: (localKey || codeKey || '').trim()
+  };
+}
+
+async function initSupabase() {
+  const { url, anonKey } = getSupabaseCredentials();
+  if (!url || !anonKey || !window.supabase) {
+    supabaseClient = null;
+    renderSupabaseStatus();
+    return;
+  }
+
+  try {
+    supabaseClient = window.supabase.createClient(url, anonKey);
+    renderSupabaseStatus();
+
+    // Fetch live data from Supabase
+    await fetchInventoryFromSupabase();
+    await fetchHeroBannersFromSupabase();
+
+    // Subscribe to Realtime Changes on accounts
+    supabaseClient
+      .channel('public:accounts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'accounts' }, (payload) => {
+        handleSupabaseAccountChange(payload);
+      })
+      .subscribe();
+
+    // Subscribe to Realtime Changes on hero_banners
+    supabaseClient
+      .channel('public:hero_banners')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'hero_banners' }, (payload) => {
+        handleSupabaseBannerChange(payload);
+      })
+      .subscribe();
+
+    console.log("🟢 Supabase Realtime connected successfully!");
+  } catch (e) {
+    console.error("Supabase init error:", e);
+    supabaseClient = null;
+    renderSupabaseStatus();
+  }
+}
+
+async function fetchInventoryFromSupabase() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('accounts').select('*').order('created_at', { ascending: false });
+    if (!error && data && data.length > 0) {
+      appState.accounts = data.map(row => ({
+        id: row.id,
+        category: row.category || 'freefire',
+        title: row.title,
+        code: row.code,
+        status: row.status || 'available',
+        isGrandPrize: row.is_grand_prize || false,
+        isFeatured: row.is_featured !== false,
+        priceLKR: Number(row.price_lkr) || 0,
+        origPriceLKR: Number(row.orig_price_lkr) || 0,
+        images: Array.isArray(row.images) ? row.images : [],
+        stats: row.stats || {},
+        evoList: Array.isArray(row.evo_list) ? row.evo_list : [],
+        description: row.description || ''
+      }));
+      renderCatalog();
+      renderAdminInventory();
+      updateGameBadgeCounts();
+    }
+  } catch (e) {
+    console.error("Failed to fetch inventory from Supabase:", e);
+  }
+}
+
+async function fetchHeroBannersFromSupabase() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('hero_banners').select('*').order('sort_order', { ascending: true });
+    if (!error && data && data.length > 0) {
+      appState.banners = data.map(row => ({
+        id: row.id,
+        title: row.title,
+        subtitle: row.subtitle,
+        description: row.description,
+        image: row.image,
+        type: row.type || 'image',
+        active: row.active !== false
+      }));
+      renderHeroCarousel();
+      renderAdminBannersList();
+    }
+  } catch (e) {
+    console.error("Failed to fetch hero banners from Supabase:", e);
+  }
+}
+
+function handleSupabaseAccountChange(payload) {
+  const { eventType, new: newRow, old: oldRow } = payload;
+  if (eventType === 'INSERT') {
+    const newAcc = {
+      id: newRow.id,
+      category: newRow.category,
+      title: newRow.title,
+      code: newRow.code,
+      status: newRow.status,
+      isGrandPrize: newRow.is_grand_prize,
+      isFeatured: newRow.is_featured,
+      priceLKR: Number(newRow.price_lkr),
+      origPriceLKR: Number(newRow.orig_price_lkr),
+      images: newRow.images || [],
+      stats: newRow.stats || {},
+      evoList: newRow.evo_list || [],
+      description: newRow.description || ''
+    };
+    appState.accounts = [newAcc, ...appState.accounts.filter(a => a.id !== newRow.id)];
+  } else if (eventType === 'UPDATE') {
+    const idx = appState.accounts.findIndex(a => a.id === newRow.id);
+    const updatedAcc = {
+      id: newRow.id,
+      category: newRow.category,
+      title: newRow.title,
+      code: newRow.code,
+      status: newRow.status,
+      isGrandPrize: newRow.is_grand_prize,
+      isFeatured: newRow.is_featured,
+      priceLKR: Number(newRow.price_lkr),
+      origPriceLKR: Number(newRow.orig_price_lkr),
+      images: newRow.images || [],
+      stats: newRow.stats || {},
+      evoList: newRow.evo_list || [],
+      description: newRow.description || ''
+    };
+    if (idx !== -1) {
+      appState.accounts[idx] = updatedAcc;
+    } else {
+      appState.accounts.unshift(updatedAcc);
+    }
+  } else if (eventType === 'DELETE') {
+    appState.accounts = appState.accounts.filter(a => a.id !== oldRow.id);
+  }
+
+  renderCatalog();
+  renderAdminInventory();
+  updateGameBadgeCounts();
+}
+
+function handleSupabaseBannerChange(payload) {
+  fetchHeroBannersFromSupabase();
+}
+
+async function syncAccountToSupabase(acc, action = 'upsert') {
+  if (!supabaseClient) return;
+  try {
+    if (action === 'delete') {
+      await supabaseClient.from('accounts').delete().eq('id', acc.id);
+    } else {
+      const row = {
+        id: acc.id,
+        category: acc.category || 'freefire',
+        title: acc.title,
+        code: acc.code,
+        status: acc.status || 'available',
+        is_grand_prize: acc.isGrandPrize || false,
+        is_featured: acc.isFeatured !== false,
+        price_lkr: acc.priceLKR || 0,
+        orig_price_lkr: acc.origPriceLKR || 0,
+        images: acc.images || [],
+        stats: acc.stats || {},
+        evo_list: acc.evoList || [],
+        description: acc.description || '',
+        updated_at: new Date().toISOString()
+      };
+      await supabaseClient.from('accounts').upsert(row);
+    }
+  } catch (e) {
+    console.error("Supabase sync account error:", e);
+  }
+}
+
+async function syncHeroBannersToSupabase() {
+  if (!supabaseClient) return;
+  try {
+    const banners = appState.banners || [];
+    const rows = banners.map((b, idx) => ({
+      id: b.id,
+      title: b.title || '',
+      subtitle: b.subtitle || '',
+      description: b.description || '',
+      image: b.image || '',
+      type: b.type || 'image',
+      active: b.active !== false,
+      sort_order: idx
+    }));
+    await supabaseClient.from('hero_banners').upsert(rows);
+  } catch (e) {
+    console.error("Supabase sync banners error:", e);
+  }
+}
+
+async function pushAllDataToSupabase() {
+  if (!supabaseClient) {
+    showToast("Please configure and connect Supabase first.", "error");
+    return;
+  }
+
+  showToast("Pushing local accounts & banners to Supabase...", "info");
+  try {
+    // 1. Push Accounts
+    const accRows = (appState.accounts || DEFAULT_ACCOUNTS).map(acc => ({
+      id: acc.id,
+      category: acc.category || 'freefire',
+      title: acc.title,
+      code: acc.code,
+      status: acc.status || 'available',
+      is_grand_prize: acc.isGrandPrize || false,
+      is_featured: acc.isFeatured !== false,
+      price_lkr: acc.priceLKR || 0,
+      orig_price_lkr: acc.origPriceLKR || 0,
+      images: acc.images || [],
+      stats: acc.stats || {},
+      evo_list: acc.evoList || [],
+      description: acc.description || ''
+    }));
+
+    const { error: accErr } = await supabaseClient.from('accounts').upsert(accRows);
+    if (accErr) throw accErr;
+
+    // 2. Push Banners
+    await syncHeroBannersToSupabase();
+
+    showToast("🎉 All accounts and slider banners uploaded to Supabase!", "success");
+    renderSupabaseStatus();
+  } catch (e) {
+    console.error("Push to Supabase error:", e);
+    showToast(`Push failed: ${e.message || 'Check database schema'}`, "error");
+  }
+}
+
+function handleSaveSupabaseConfig(e) {
+  e.preventDefault();
+  const url = document.getElementById('supabaseUrlInput').value.trim();
+  const key = document.getElementById('supabaseKeyInput').value.trim();
+
+  localStorage.setItem('nur_supabase_url', url);
+  localStorage.setItem('nur_supabase_key', key);
+
+  showToast("Connecting to Supabase...", "info");
+  initSupabase().then(() => {
+    if (supabaseClient) {
+      showToast("🟢 Connected to Supabase Cloud Database!", "success");
+    } else {
+      showToast("Could not connect to Supabase. Check URL/Key.", "error");
+    }
+  });
+}
+
+function handleClearSupabaseConfig() {
+  localStorage.removeItem('nur_supabase_url');
+  localStorage.removeItem('nur_supabase_key');
+  supabaseClient = null;
+  const urlInp = document.getElementById('supabaseUrlInput');
+  const keyInp = document.getElementById('supabaseKeyInput');
+  if (urlInp) urlInp.value = '';
+  if (keyInp) keyInp.value = '';
+  renderSupabaseStatus();
+  showToast("Supabase disconnected. Using local dataset.", "info");
+}
+
+function renderSupabaseStatus() {
+  const badge = document.getElementById('supabaseConnectionBadge');
+  const urlInp = document.getElementById('supabaseUrlInput');
+  const keyInp = document.getElementById('supabaseKeyInput');
+  const sqlEl = document.getElementById('supabaseSqlCode');
+
+  if (sqlEl) sqlEl.textContent = SUPABASE_DEFAULT_SQL;
+
+  const { url, anonKey } = getSupabaseCredentials();
+  if (urlInp && !urlInp.value) urlInp.value = url;
+  if (keyInp && !keyInp.value) keyInp.value = anonKey;
+
+  if (badge) {
+    if (supabaseClient) {
+      badge.innerHTML = `
+        <span style="background:#15803d;color:#ffffff;font-size:0.72rem;font-weight:800;padding:4px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:5px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite;"></span> Connected 🟢 (Realtime Live)
+        </span>
+      `;
+    } else {
+      badge.innerHTML = `
+        <span style="background:#dc2626;color:#ffffff;font-size:0.72rem;font-weight:800;padding:4px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px;">
+          <span style="width:6px;height:6px;border-radius:50%;background:#ffffff;"></span> Not Connected
+        </span>
+      `;
+    }
+  }
+}
+
+function copySupabaseSql() {
+  navigator.clipboard.writeText(SUPABASE_DEFAULT_SQL).then(() => {
+    showToast("SQL Schema copied to clipboard! Paste in Supabase SQL Editor.", "success");
+  }).catch(() => {
+    showToast("Select and copy the SQL code manually.", "info");
+  });
+}
+
+function switchAdminMainTab(tab) {
+  const tabs = ['inventory', 'banners', 'access', 'supabase'];
+  tabs.forEach(t => {
+    const btn = document.getElementById(`tabBtnAdmin${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const pane = document.getElementById(`adminPane${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (btn) btn.classList.toggle('active', t === tab);
+    if (pane) pane.classList.toggle('active', t === tab);
+  });
+  if (tab === 'inventory') renderAdminInventory();
+  if (tab === 'banners') renderAdminBannersList();
+  if (tab === 'access') renderSecondaryAdminsList();
+  if (tab === 'supabase') renderSupabaseStatus();
+  initLucide();
 }

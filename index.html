@@ -778,6 +778,9 @@
           <button type="button" class="admin-main-tab" id="tabBtnAdminAccess" onclick="switchAdminMainTab('access')">
             <i data-lucide="shield-check" style="width:16px;height:16px;"></i> Admin Access &amp; Team
           </button>
+          <button type="button" class="admin-main-tab" id="tabBtnAdminSupabase" onclick="switchAdminMainTab('supabase')">
+            <i data-lucide="database" style="width:16px;height:16px;"></i> Supabase Cloud Sync
+          </button>
         </div>
 
         <!-- TAB PANE 1: ACCOUNT INVENTORY & LISTINGS -->
@@ -1416,6 +1419,89 @@
             </div>
           </div>
         </div>
+
+        <!-- TAB PANE 4: SUPABASE REALTIME CLOUD DATABASE -->
+        <div id="adminPaneSupabase" class="admin-tab-pane">
+          <div style="background:#0f172a;color:#fff;border-radius:12px;padding:18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;border:1px solid #1e293b;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="width:44px;height:44px;border-radius:10px;background:#3ecf8e;display:flex;align-items:center;justify-content:center;color:#0f172a;box-shadow:0 4px 14px rgba(62,207,142,0.4);flex-shrink:0;">
+                <i data-lucide="database" style="width:24px;height:24px;"></i>
+              </div>
+              <div>
+                <h4 style="font-size:1.1rem;font-weight:900;font-family:'Rajdhani',sans-serif;color:#fff;margin:0;">Supabase Realtime Cloud Database</h4>
+                <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;">
+                  100% Free Realtime PostgreSQL Sync across all visitors &amp; devices worldwide.
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;" id="supabaseConnectionBadge">
+              <span style="background:#dc2626;color:#ffffff;font-size:0.72rem;font-weight:800;padding:4px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#ffffff;"></span> Not Connected
+              </span>
+            </div>
+          </div>
+
+          <!-- Configuration Form Card -->
+          <div class="admin-access-card" style="margin-top:0;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+              <div>
+                <div style="font-size:0.95rem;font-weight:900;color:#0f172a;display:flex;align-items:center;gap:6px;">
+                  <i data-lucide="key" style="width:16px;height:16px;color:#3ecf8e;"></i> Supabase API Credentials
+                </div>
+                <div style="font-size:0.75rem;color:#64748b;margin-top:2px;">
+                  Create a free project at <a href="https://supabase.com" target="_blank" style="color:#2563eb;text-decoration:underline;">supabase.com</a> and paste your Project URL &amp; Anon Public Key below.
+                </div>
+              </div>
+            </div>
+
+            <form id="supabaseConfigForm" onsubmit="handleSaveSupabaseConfig(event)" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+              <div class="form-group" style="margin:0;">
+                <label class="form-label" style="font-size:0.75rem;">Project URL</label>
+                <input type="text" id="supabaseUrlInput" class="form-control" placeholder="https://xxxxxxxx.supabase.co" required>
+              </div>
+              <div class="form-group" style="margin:0;">
+                <label class="form-label" style="font-size:0.75rem;">Anon Public Key (anon-key)</label>
+                <input type="text" id="supabaseKeyInput" class="form-control" placeholder="eyJhbGciOiJIUzI1NiIsInR..." required>
+              </div>
+              <div style="grid-column:1 / -1;display:flex;gap:10px;justify-content:flex-end;">
+                <button type="button" class="btn-reset-filter" onclick="handleClearSupabaseConfig()" style="padding:8px 14px;font-size:0.8rem;color:#dc2626;">Disconnect</button>
+                <button type="submit" class="btn-garena-proceed" style="padding:8px 18px;font-size:0.82rem;background:#10b981;border-color:#10b981;">
+                  <i data-lucide="save" style="width:14px;height:14px;"></i> Save &amp; Connect Supabase
+                </button>
+              </div>
+            </form>
+
+            <div style="border-top:1px solid #e2e8f0;padding-top:16px;display:flex;flex-direction:column;gap:14px;">
+              <!-- 1-Click Push Local Data to Supabase -->
+              <div style="display:flex;align-items:center;justify-content:space-between;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:12px 14px;flex-wrap:wrap;gap:10px;">
+                <div>
+                  <div style="font-size:0.88rem;font-weight:800;color:#166534;display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="upload-cloud" style="width:16px;height:16px;"></i> Push All Local Accounts &amp; Banners to Supabase
+                  </div>
+                  <div style="font-size:0.72rem;color:#15803d;margin-top:2px;">
+                    Uploads all existing accounts and slider banners into your Supabase database in 1 click.
+                  </div>
+                </div>
+                <button type="button" class="btn-garena-proceed" style="padding:7px 16px;font-size:0.78rem;background:#15803d;border-color:#15803d;" onclick="pushAllDataToSupabase()">
+                  <i data-lucide="upload" style="width:14px;height:14px;"></i> Push Data to Cloud
+                </button>
+              </div>
+
+              <!-- SQL Setup Assistant -->
+              <div style="background:#0f172a;border-radius:10px;padding:14px;color:#e2e8f0;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                  <div style="font-size:0.82rem;font-weight:800;color:#38bdf8;display:flex;align-items:center;gap:6px;">
+                    <i data-lucide="terminal" style="width:14px;height:14px;"></i> Supabase SQL Schema (Run in Supabase SQL Editor)
+                  </div>
+                  <button type="button" class="btn-reset-filter" style="padding:3px 8px;font-size:0.7rem;color:#38bdf8;border-color:#0284c7;background:#0369a1;" onclick="copySupabaseSql()">
+                    <i data-lucide="copy" style="width:12px;height:12px;"></i> Copy SQL Query
+                  </button>
+                </div>
+                <pre id="supabaseSqlCode" style="background:#020617;border:1px solid #1e293b;border-radius:6px;padding:10px;font-family:monospace;font-size:0.72rem;color:#34d399;max-height:140px;overflow-y:auto;white-space:pre-wrap;"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1703,6 +1789,7 @@
   </div>
 
   <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="data.js?v=2.2"></script>
   <script src="app.js?v=2.2"></script>
 </body>
