@@ -113,27 +113,11 @@ function loadHeroBanners() {
   appState.banners = [
     {
       id: 'banner-default-1',
-      title: 'NUR STORE Official Account Store',
-      subtitle: 'SG Region Verified & Trusted Account Store',
-      image: 'hero_banner.png',
-      type: 'image',
-      active: true
-    },
-    {
-      id: 'banner-default-2',
-      title: 'DIAMONDS at a DISCOUNT',
-      subtitle: 'Exclusive Offers',
-      description: 'UP TO 30% BONUS ON FREE FIRE TOP-UP • INSTANT DELIVERY',
-      image: '',
-      type: 'discount',
-      active: true
-    },
-    {
-      id: 'banner-default-3',
-      title: 'BRAND NEW OFFICIAL ACCOUNTS & STORE',
+      title: 'NUR STORE - Official Accounts & Top-Up Store',
       subtitle: '100% Safe Recovery • Instant WhatsApp Delivery',
-      image: '',
-      type: 'garena_card',
+      description: 'Sri Lanka\'s #1 verified marketplace for Free Fire accounts & Top-Up.',
+      image: 'https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/hero_banner.png',
+      type: 'image',
       active: true
     }
   ];
@@ -168,7 +152,7 @@ function renderHeroCarousel() {
       const imgUrl = formatDirectImageUrl(banner.image);
       slideContent = `
         <div class="hero-slide-inner">
-          <img src="${imgUrl}" alt="${banner.title || 'Hero Banner'}" class="hero-slide-img" onerror="this.onerror=null;this.src='hero_banner.png';">
+          <img src="${imgUrl}" alt="${banner.title || 'Hero Banner'}" class="hero-slide-img" onerror="this.onerror=null;this.src='https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/hero_banner.png';">
         </div>
       `;
     } else if (banner.type === 'discount') {
@@ -2903,7 +2887,7 @@ function updateBannerLivePreview() {
   }
 }
 
-function handleSaveHeroBanner(e) {
+async function handleSaveHeroBanner(e) {
   e.preventDefault();
 
   const editId = document.getElementById('adminBannerEditId').value;
@@ -2926,6 +2910,7 @@ function handleSaveHeroBanner(e) {
         active: isActive
       };
       saveHeroBanners();
+      await syncHeroBannersToSupabase();
       closeBannerForm();
       showToast("Hero banner updated successfully!", "success");
     }
@@ -2938,8 +2923,9 @@ function handleSaveHeroBanner(e) {
       type: 'image',
       active: isActive
     };
-    appState.banners.push(newBanner);
+    appState.banners.unshift(newBanner);
     saveHeroBanners();
+    await syncHeroBannersToSupabase();
     closeBannerForm();
     showToast("New hero banner added to carousel!", "success");
   }
