@@ -517,3 +517,61 @@ const SUPABASE_CONFIG = {
   url: "https://nlhsufifscyilvoackxf.supabase.co",
   anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5saHN1Zmlmc2N5aWx2b2Fja3hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4MTA2NDksImV4cCI6MjEwMzM4NjY0OX0.TbC_G1aYzwBwqx4AyeOWoRyRab8Zui3OZ60nr33QjPY"
 };
+
+const SUPABASE_DEFAULT_SQL = `-- 1. Create accounts table
+CREATE TABLE IF NOT EXISTS public.accounts (
+  id TEXT PRIMARY KEY,
+  category TEXT NOT NULL DEFAULT 'freefire',
+  title TEXT NOT NULL,
+  code TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'available',
+  is_grand_prize BOOLEAN DEFAULT false,
+  is_featured BOOLEAN DEFAULT true,
+  price_lkr NUMERIC DEFAULT 0,
+  orig_price_lkr NUMERIC DEFAULT 0,
+  images JSONB DEFAULT '[]'::jsonb,
+  stats JSONB DEFAULT '{}'::jsonb,
+  evo_list JSONB DEFAULT '[]'::jsonb,
+  description TEXT DEFAULT '',
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 2. Create hero_banners table
+CREATE TABLE IF NOT EXISTS public.hero_banners (
+  id TEXT PRIMARY KEY,
+  title TEXT DEFAULT '',
+  subtitle TEXT DEFAULT '',
+  description TEXT DEFAULT '',
+  image TEXT DEFAULT '',
+  type TEXT DEFAULT 'image',
+  active BOOLEAN DEFAULT true,
+  sort_order INT DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- 3. Create Live Customer Support Chat Messages Table
+CREATE TABLE IF NOT EXISTS public.support_messages (
+  id TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  session_id TEXT NOT NULL,
+  sender TEXT NOT NULL DEFAULT 'customer',
+  message TEXT NOT NULL,
+  customer_name TEXT DEFAULT 'Store Visitor',
+  status TEXT NOT NULL DEFAULT 'unread',
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Enable RLS and public policies
+ALTER TABLE public.accounts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.hero_banners ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.support_messages ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public all accounts" ON public.accounts FOR ALL USING (true);
+CREATE POLICY "Allow public all hero_banners" ON public.hero_banners FOR ALL USING (true);
+CREATE POLICY "Allow public all support_messages" ON public.support_messages FOR ALL USING (true);
+
+-- Enable Realtime
+ALTER PUBLICATION supabase_realtime ADD TABLE public.accounts;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.hero_banners;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.support_messages;
+`;

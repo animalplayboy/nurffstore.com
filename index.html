@@ -18,7 +18,7 @@
   <link rel="icon" type="image/jpeg" href="https://nlhsufifscyilvoackxf.supabase.co/storage/v1/object/public/store-assets/store_logo.jpg">
   
   <!-- Styles -->
-  <link rel="stylesheet" href="styles.css?v=3.1">
+  <link rel="stylesheet" href="styles.css?v=3.2">
 </head>
 <body>
 
@@ -713,6 +713,10 @@
           <button type="button" class="admin-main-tab" id="tabBtnAdminBanners" onclick="switchAdminMainTab('banners')">
             <i data-lucide="image" style="width:16px;height:16px;"></i> Hero Banners &amp; Slider
           </button>
+          <button type="button" class="admin-main-tab" id="tabBtnAdminInbox" onclick="switchAdminMainTab('inbox')">
+            <i data-lucide="message-square" style="width:16px;height:16px;"></i> Live Support Inbox
+            <span class="admin-inbox-badge" id="adminInboxUnreadBadge" style="display:none;background:#ef4444;color:#fff;font-size:0.65rem;font-weight:900;padding:2px 7px;border-radius:10px;margin-left:4px;">0</span>
+          </button>
           <button type="button" class="admin-main-tab" id="tabBtnAdminAccess" onclick="switchAdminMainTab('access')">
             <i data-lucide="shield-check" style="width:16px;height:16px;"></i> Admin Access &amp; Team
           </button>
@@ -1352,6 +1356,58 @@
             </div>
           </div>
         </div>
+
+        <!-- TAB PANE 4: LIVE CUSTOMER SUPPORT INBOX -->
+        <div id="adminPaneInbox" class="admin-tab-pane">
+          <!-- Top Overview Bar -->
+          <div style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color:#fff; border-radius:12px; padding:16px 20px; margin-bottom:16px; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; border:1px solid #334155;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="width:44px; height:44px; border-radius:10px; background:rgba(239,68,68,0.15); border:1.5px solid var(--garena-red); display:flex; align-items:center; justify-content:center; color:#ef4444; flex-shrink:0;">
+                <i data-lucide="message-square" style="width:22px; height:22px;"></i>
+              </div>
+              <div>
+                <h4 style="font-size:1.1rem; font-weight:900; font-family:'Rajdhani',sans-serif; color:#fff; margin:0;">
+                  Live Customer Support &amp; Messaging Inbox
+                </h4>
+                <div style="font-size:0.75rem; color:#94a3b8; margin-top:2px;">
+                  Realtime chat stream with visitors &amp; buyers. Reply directly from Admin Panel or handover to WhatsApp.
+                </div>
+              </div>
+            </div>
+            
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:0.75rem; font-weight:800; background:#15803d; color:#ffffff; padding:4px 12px; border-radius:20px; display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:6px; height:6px; border-radius:50%; background:#86efac;"></span> Realtime Active
+              </span>
+            </div>
+          </div>
+
+          <!-- Inbox Main Two-Column Layout -->
+          <div class="admin-inbox-grid">
+            <!-- Left Column: Active Visitor Conversations -->
+            <div class="admin-inbox-sidebar">
+              <div class="inbox-sidebar-header">
+                <div style="font-size:0.85rem; font-weight:800; color:#0f172a; display:flex; align-items:center; justify-content:space-between;">
+                  <span>Active Chats</span>
+                  <span id="adminInboxTotalCount" style="font-size:0.7rem; background:#f1f5f9; color:#475569; padding:2px 8px; border-radius:10px; font-weight:800;">0 Active</span>
+                </div>
+                <div class="inbox-search-wrap" style="margin-top:8px;">
+                  <input type="text" id="adminInboxSearchInput" placeholder="Search visitor or message..." oninput="handleInboxSearch(this.value)" class="form-control" style="font-size:0.78rem; padding:6px 10px;">
+                </div>
+              </div>
+
+              <!-- Sessions List -->
+              <div class="inbox-sessions-list" id="adminInboxSessionsList">
+                <!-- Dynamically rendered by app.js -->
+              </div>
+            </div>
+
+            <!-- Right Column: Active Chat Stream & Reply Box -->
+            <div class="admin-inbox-main" id="adminInboxChatMain">
+              <!-- Dynamically populated by renderAdminActiveChatSession() in app.js -->
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1614,14 +1670,19 @@
           <div style="font-size:0.68rem;color:#bbf7d0;">Online • Instant Replies</div>
         </div>
       </div>
-      <button class="modal-close-btn" onclick="toggleChat()" style="background:transparent;color:#fff;border:none;">
-        <i data-lucide="minus" style="width:16px;height:16px;"></i>
-      </button>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <a href="https://wa.me/94778806366" target="_blank" class="chat-wa-direct-link" title="Open WhatsApp Directly">
+          <i data-lucide="phone-call" style="width:13px;height:13px;"></i> WhatsApp
+        </a>
+        <button class="modal-close-btn" onclick="toggleChat()" style="background:transparent;color:#fff;border:none;">
+          <i data-lucide="minus" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
     </div>
 
     <div class="chat-msgs-body" id="chatMessages">
       <div class="chat-bubble bot">
-        Hello! 👋 Welcome to NUR STORE (Official Account Seller). How can we assist you with Free Fire, CapCut, or TikTok accounts today?
+        Hello! 👋 Welcome to NUR STORE. Type your message below to chat with our <strong>Live Store Admin</strong> or choose a quick option:
         <div class="chat-prompts-row" style="margin-top:6px;">
           <button class="chat-prompt-btn" onclick="sendQuickPrompt('How do I buy a Free Fire account?')">Buy FF Account?</button>
           <button class="chat-prompt-btn" onclick="sendQuickPrompt('What payment methods do you accept?')">Payment Methods?</button>
@@ -1631,7 +1692,7 @@
     </div>
 
     <div class="chat-input-row">
-      <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="handleChatKeyDown(event)">
+      <input type="text" id="chatInput" placeholder="Type a message to admin..." onkeydown="handleChatKeyDown(event)">
       <button class="btn-chat-send" onclick="sendChatMessage()">
         <i data-lucide="send" style="width:14px;height:14px;"></i>
       </button>
@@ -1640,7 +1701,7 @@
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="data.js?v=3.1"></script>
-  <script src="app.js?v=3.1"></script>
+  <script src="data.js?v=3.2"></script>
+  <script src="app.js?v=3.2"></script>
 </body>
 </html>

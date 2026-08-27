@@ -9,6 +9,8 @@
 let appState = {
   accounts: [],
   banners: [],
+  supportMessages: [],
+  activeInboxSessionId: null,
   selectedCategory: 'freefire', // default to Free Fire
   selectedStatus: 'all',
   isGrandPrizeOnly: false,
@@ -27,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPreloader();
   loadInventory();
   loadHeroBanners();
+  loadSupportMessages();
   initBankList();
   renderCatalog();
   updateGameBadgeCounts();
@@ -2569,47 +2572,117 @@ function toggleChat() {
   }
 }
 
+function getOrCreateChatSessionId() {
+  let sid = localStorage.getItem('nexus_chat_session_id');
+  if (!sid) {
+    sid = 'VISITOR-' + Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem('nexus_chat_session_id', sid);
+  }
+  return sid;
+}
+
+function loadSupportMessages() {
+  const saved = localStorage.getItem('nexus_live_support_messages');
+  if (saved) {
+    try {
+      appState.supportMessages = JSON.parse(saved);
+    } catch (e) {
+      console.error("Failed to parse support messages:", e);
+      appState.supportMessages = [];
+    }
+  } else {
+    appState.supportMessages = [];
+  }
+  updateAdminInboxBadge();
+}
+
+function saveSupportMessages() {
+  localStorage.setItem('nexus_live_support_messages', JSON.stringify(appState.supportMessages));
+  updateAdminInboxBadge();
+}
+
+function updateAdminInboxBadge() {
+  const unreadCount = (appState.supportMessages || []).filter(m => m.sender === 'customer' && m.status === 'unread').length;
+  const badge = document.getElementById('adminInboxUnreadBadge');
+  if (badge) {
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+  const totalCountEl = document.getElementById('adminInboxTotalCount');
+  if (totalCountEl) {
+    const sessions = new Set((appState.supportMessages || []).map(m => m.session_id));
+    totalCountEl.textContent = `${sessions.size} Active`;
+  }
+}
+
 function handleChatKeyDown(e) {
   if (e.key === 'Enter') {
     sendChatMessage();
   }
 }
 
-function sendChatMessage() {
+async function sendChatMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
 
   input.value = '';
+  const sid = getOrCreateChatSessionId();
   appendChatBubble(text, 'user');
 
+  const msgObj = {
+    id: `msg-${Date.now()}`,
+    session_id: sid,
+    sender: 'customer',
+    message: text,
+    customer_name: `Visitor #${sid.replace('VISITOR-', '')}`,
+    status: 'unread',
+    created_at: new Date().toISOString()
+  };
+
+  appState.supportMessages.push(msgObj);
+  saveSupportMessages();
+
+  if (supabaseClient) {
+    try {
+      await supabaseClient.from('support_messages').insert(msgObj);
+    } catch (e) {
+      console.error("Supabase send customer message error:", e);
+    }
+  }
+
+  // Auto-respond if matches FAQ or show handover message
   setTimeout(() => {
     generateBotResponse(text);
-  }, 700);
+  }, 600);
 }
 
 function sendQuickPrompt(promptText) {
-  appendChatBubble(promptText, 'user');
-  setTimeout(() => {
-    generateBotResponse(promptText);
-  }, 600);
+  const input = document.getElementById('chatInput');
+  if (input) input.value = promptText;
+  sendChatMessage();
 }
 
 function appendChatBubble(msg, sender) {
   const container = document.getElementById('chatMessages');
+  if (!container) return;
   const bubble = document.createElement('div');
   bubble.className = `chat-bubble ${sender}`;
-  bubble.textContent = msg;
+  bubble.textContent = typeof sanitizeEncoding === 'function' ? sanitizeEncoding(msg) : msg;
   container.appendChild(bubble);
   container.scrollTop = container.scrollHeight;
 }
 
 function generateBotResponse(userMsg) {
   const lower = userMsg.toLowerCase();
-  let reply = "Thanks for contacting NUR STORE! 🎮 Our admin is available on WhatsApp right now for instant handover.";
+  let reply = "Thanks for your message! 🎮 Our Store Admin has received your chat and is reviewing it right now. You can also chat directly on WhatsApp (+94 77 880 6366) for instant handover.";
 
   if (lower.includes('free fire') || lower.includes('ff')) {
-    reply = "🔥 Free Fire accounts with Max EVO guns, Sakura/HipHop bundles and Master ranks are in stock! All accounts come with clean Gmail & 100% warranty.";
+    reply = "🔥 Free Fire accounts with Max EVO guns, Sakura/HipHop bundles and Master ranks are in stock! Clean Gmail logins with full handover warranty.";
   } else if (lower.includes('capcut') || lower.includes('warranty')) {
     reply = "🎬 CapCut Pro 1-Year & Lifetime packages are active with 4K export and AI auto-captioning for PC, Mac, and Mobile.";
   } else if (lower.includes('tiktok') || lower.includes('monetiz')) {
@@ -2617,10 +2690,287 @@ function generateBotResponse(userMsg) {
   } else if (lower.includes('youtube') || lower.includes('yt') || lower.includes('subscriber') || lower.includes('channel')) {
     reply = "📺 Monetized YouTube channels (10K to 125K+ subscribers) with active AdSense and clean records are available for instant owner transfer!";
   } else if (lower.includes('payment') || lower.includes('bank')) {
-    reply = "💳 We accept Commercial Bank, Sampath, BOC, EzCash, FriMi, and Binance USDT. Transfer and upload slip for 5-minute delivery!";
+    reply = "💳 We accept Nations Trust Bank (NTB), People's Bank, EzCash, and WhatsApp slip verification. Transfer & attach slip for 5-minute delivery!";
   }
 
   appendChatBubble(reply, 'bot');
+}
+
+// =========================================================
+// 12. ADMIN LIVE SUPPORT INBOX CONTROLLER
+// =========================================================
+
+function renderAdminInbox() {
+  updateAdminInboxBadge();
+  const sessionsListEl = document.getElementById('adminInboxSessionsList');
+  const chatMainEl = document.getElementById('adminInboxChatMain');
+  if (!sessionsListEl || !chatMainEl) return;
+
+  const msgs = appState.supportMessages || [];
+  const search = (document.getElementById('adminInboxSearchInput')?.value || '').toLowerCase().trim();
+
+  // Group messages by session_id
+  const sessionMap = {};
+  msgs.forEach(m => {
+    if (!sessionMap[m.session_id]) {
+      sessionMap[m.session_id] = {
+        session_id: m.session_id,
+        customer_name: m.customer_name || `Visitor #${m.session_id.replace('VISITOR-', '')}`,
+        messages: [],
+        lastMessage: '',
+        lastTime: m.created_at,
+        unreadCount: 0
+      };
+    }
+    sessionMap[m.session_id].messages.push(m);
+    sessionMap[m.session_id].lastMessage = m.message;
+    sessionMap[m.session_id].lastTime = m.created_at;
+    if (m.sender === 'customer' && m.status === 'unread') {
+      sessionMap[m.session_id].unreadCount++;
+    }
+  });
+
+  const sessions = Object.values(sessionMap).sort((a, b) => new Date(b.lastTime) - new Date(a.lastTime));
+  const filteredSessions = sessions.filter(s => {
+    if (!search) return true;
+    return s.customer_name.toLowerCase().includes(search) || 
+           s.session_id.toLowerCase().includes(search) ||
+           s.messages.some(m => m.message.toLowerCase().includes(search));
+  });
+
+  if (filteredSessions.length === 0) {
+    sessionsListEl.innerHTML = `
+      <div style="padding:30px 14px; text-align:center; color:#94a3b8; font-size:0.8rem;">
+        <i data-lucide="message-square" style="width:28px; height:28px; margin-bottom:8px; opacity:0.5;"></i>
+        <div>No customer messages yet.</div>
+        <div style="font-size:0.7rem; color:#cbd5e1; margin-top:4px;">Messages from website visitors will appear here in real-time.</div>
+      </div>
+    `;
+    chatMainEl.innerHTML = `
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#94a3b8; padding:30px; text-align:center;">
+        <i data-lucide="inbox" style="width:42px; height:42px; color:#cbd5e1; margin-bottom:12px;"></i>
+        <h4 style="color:#475569; margin:0 0 6px; font-weight:800;">No Conversation Selected</h4>
+        <p style="font-size:0.78rem; color:#94a3b8; margin:0;">Select a customer chat on the left to start live messaging.</p>
+      </div>
+    `;
+    initLucide();
+    return;
+  }
+
+  // If no active session selected or current not in list, pick the first
+  if (!appState.activeInboxSessionId || !sessionMap[appState.activeInboxSessionId]) {
+    appState.activeInboxSessionId = filteredSessions[0].session_id;
+  }
+
+  sessionsListEl.innerHTML = filteredSessions.map(s => {
+    const isActive = s.session_id === appState.activeInboxSessionId;
+    const timeStr = new Date(s.lastTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const preview = typeof sanitizeEncoding === 'function' ? sanitizeEncoding(s.lastMessage) : s.lastMessage;
+    return `
+      <div class="inbox-session-card ${isActive ? 'active' : ''} ${s.unreadCount > 0 ? 'has-unread' : ''}" onclick="selectAdminInboxSession('${s.session_id}')">
+        <div class="inbox-session-avatar">
+          ${s.customer_name.charAt(0).toUpperCase()}
+        </div>
+        <div class="inbox-session-info">
+          <div class="inbox-session-name">
+            <span>${s.customer_name}</span>
+            <span style="font-size:0.65rem; color:#94a3b8; font-weight:600;">${timeStr}</span>
+          </div>
+          <div class="inbox-session-preview">${preview || 'New inquiry'}</div>
+        </div>
+        ${s.unreadCount > 0 ? `<span class="inbox-unread-pill">${s.unreadCount}</span>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  renderAdminActiveChatSession();
+  initLucide();
+}
+
+function selectAdminInboxSession(sessionId) {
+  appState.activeInboxSessionId = sessionId;
+  
+  // Mark messages in this session as read
+  (appState.supportMessages || []).forEach(m => {
+    if (m.session_id === sessionId && m.sender === 'customer' && m.status === 'unread') {
+      m.status = 'read';
+      if (supabaseClient) {
+        supabaseClient.from('support_messages').update({ status: 'read' }).eq('id', m.id).then();
+      }
+    }
+  });
+
+  saveSupportMessages();
+  renderAdminInbox();
+}
+
+function handleInboxSearch(val) {
+  renderAdminInbox();
+}
+
+function renderAdminActiveChatSession() {
+  const chatMainEl = document.getElementById('adminInboxChatMain');
+  if (!chatMainEl || !appState.activeInboxSessionId) return;
+
+  const sid = appState.activeInboxSessionId;
+  const sessionMsgs = (appState.supportMessages || []).filter(m => m.session_id === sid);
+  const customerName = sessionMsgs[0]?.customer_name || `Visitor #${sid.replace('VISITOR-', '')}`;
+
+  const msgsHtml = sessionMsgs.map(m => {
+    const isAdmin = m.sender === 'admin';
+    const timeStr = new Date(m.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const cleanMsg = typeof sanitizeEncoding === 'function' ? sanitizeEncoding(m.message) : m.message;
+    return `
+      <div class="inbox-msg ${isAdmin ? 'admin' : 'customer'}">
+        <div class="inbox-msg-sender">${isAdmin ? '🛡️ Super Admin' : '👤 Customer'}</div>
+        <div>${cleanMsg}</div>
+        <div class="inbox-msg-time">${timeStr}</div>
+      </div>
+    `;
+  }).join('');
+
+  chatMainEl.innerHTML = `
+    <div class="inbox-chat-header">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:34px; height:34px; border-radius:8px; background:var(--garena-red); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:0.85rem;">
+          ${customerName.charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <div style="font-size:0.9rem; font-weight:800; color:#0f172a;">${customerName}</div>
+          <div style="font-size:0.68rem; color:#16a34a; font-weight:700; display:flex; align-items:center; gap:4px;">
+            <span style="width:6px; height:6px; border-radius:50%; background:#22c55e;"></span> Active on Site
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:8px;">
+        <a href="https://wa.me/94778806366" target="_blank" class="btn-garena-proceed" style="padding:4px 10px; font-size:0.72rem; background:#25d366; border-color:#25d366;" title="Open WhatsApp Chat">
+          <i data-lucide="phone" style="width:12px; height:12px;"></i> WhatsApp
+        </a>
+        <button type="button" class="btn-reset-filter" style="padding:4px 8px; font-size:0.72rem; color:#dc2626;" onclick="deleteAdminInboxSession('${sid}')" title="Delete Conversation">
+          <i data-lucide="trash-2" style="width:13px; height:13px;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages Stream -->
+    <div class="inbox-chat-stream" id="adminInboxChatStream">
+      ${msgsHtml || '<div style="color:#94a3b8; text-align:center; padding:20px; font-size:0.8rem;">No messages in this thread.</div>'}
+    </div>
+
+    <!-- Quick Reply Presets -->
+    <div class="inbox-quick-replies">
+      <button type="button" class="inbox-quick-btn" onclick="sendAdminQuickReply('Yes, this account is 100% available with clean Gmail and full recovery guarantee!')">🔥 In Stock</button>
+      <button type="button" class="inbox-quick-btn" onclick="sendAdminQuickReply('Our bank details: Nations Trust Bank (200120234765) or People\\'s Bank (082200110131937). Please attach deposit slip.')">💳 Bank Details</button>
+      <button type="button" class="inbox-quick-btn" onclick="sendAdminQuickReply('Please WhatsApp our hotline directly at +94 77 880 6366 for 5-minute instant handover.')">📲 WhatsApp Direct</button>
+      <button type="button" class="inbox-quick-btn" onclick="sendAdminQuickReply('All CapCut Pro packages include 365-day replacement warranty with 4K export.')">🎬 CapCut Warranty</button>
+    </div>
+
+    <!-- Reply Input Bar -->
+    <div class="inbox-input-bar">
+      <input type="text" id="adminInboxReplyInput" class="form-control" placeholder="Type your reply to customer..." onkeydown="handleAdminInboxKeyDown(event)">
+      <button type="button" class="btn-garena-proceed" style="padding:8px 16px; font-size:0.82rem; white-space:nowrap;" onclick="sendAdminReply()">
+        <i data-lucide="send" style="width:14px; height:14px;"></i> Send Reply
+      </button>
+    </div>
+  `;
+
+  const stream = document.getElementById('adminInboxChatStream');
+  if (stream) stream.scrollTop = stream.scrollHeight;
+  initLucide();
+}
+
+function handleAdminInboxKeyDown(e) {
+  if (e.key === 'Enter') {
+    sendAdminReply();
+  }
+}
+
+async function sendAdminReply() {
+  const input = document.getElementById('adminInboxReplyInput');
+  const text = input ? input.value.trim() : '';
+  if (!text || !appState.activeInboxSessionId) return;
+
+  const sid = appState.activeInboxSessionId;
+  input.value = '';
+
+  const replyObj = {
+    id: `msg-${Date.now()}`,
+    session_id: sid,
+    sender: 'admin',
+    message: text,
+    customer_name: 'NUR Support (Admin)',
+    status: 'read',
+    created_at: new Date().toISOString()
+  };
+
+  appState.supportMessages.push(replyObj);
+  saveSupportMessages();
+
+  if (supabaseClient) {
+    try {
+      await supabaseClient.from('support_messages').insert(replyObj);
+    } catch (e) {
+      console.error("Supabase send admin reply error:", e);
+    }
+  }
+
+  // If customer is currently on same browser, append directly
+  const localSid = localStorage.getItem('nexus_chat_session_id');
+  if (localSid === sid) {
+    appendChatBubble(text, 'bot');
+  }
+
+  showToast("Reply sent to customer!", "success");
+  renderAdminActiveChatSession();
+}
+
+function sendAdminQuickReply(text) {
+  const input = document.getElementById('adminInboxReplyInput');
+  if (input) input.value = text;
+  sendAdminReply();
+}
+
+function deleteAdminInboxSession(sessionId) {
+  showConfirmDialog({
+    title: "Delete this conversation?",
+    desc: "Are you sure you want to permanently delete this customer chat thread?",
+    icon: 'trash-2',
+    confirmBtnText: 'Delete Thread',
+    btnColor: '#dc2626',
+    onConfirm: async () => {
+      appState.supportMessages = (appState.supportMessages || []).filter(m => m.session_id !== sessionId);
+      saveSupportMessages();
+      if (supabaseClient) {
+        try {
+          await supabaseClient.from('support_messages').delete().eq('session_id', sessionId);
+        } catch (e) {
+          console.error("Supabase delete session error:", e);
+        }
+      }
+      appState.activeInboxSessionId = null;
+      renderAdminInbox();
+      showToast("Conversation deleted.", "info");
+    }
+  });
+}
+
+async function fetchSupportMessagesFromSupabase() {
+  if (!supabaseClient) return;
+  try {
+    const { data, error } = await supabaseClient.from('support_messages').select('*').order('created_at', { ascending: true });
+    if (!error && data) {
+      appState.supportMessages = data;
+      localStorage.setItem('nexus_live_support_messages', JSON.stringify(appState.supportMessages));
+      updateAdminInboxBadge();
+      const inboxPane = document.getElementById('adminPaneInbox');
+      if (inboxPane && inboxPane.classList.contains('active')) {
+        renderAdminInbox();
+      }
+    }
+  } catch (e) {
+    console.error("Failed to fetch support messages from Supabase:", e);
+  }
 }
 
 // Helpers
@@ -3138,6 +3488,7 @@ async function initSupabase() {
     // Fetch live data from Supabase
     await fetchInventoryFromSupabase();
     await fetchHeroBannersFromSupabase();
+    await fetchSupportMessagesFromSupabase();
 
     // Subscribe to Realtime Changes on accounts
     supabaseClient
@@ -3155,11 +3506,54 @@ async function initSupabase() {
       })
       .subscribe();
 
+    // Subscribe to Realtime Changes on support_messages
+    supabaseClient
+      .channel('public:support_messages')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'support_messages' }, (payload) => {
+        handleSupabaseMessageChange(payload);
+      })
+      .subscribe();
+
     console.log("🟢 Supabase Realtime connected successfully!");
   } catch (e) {
     console.error("Supabase init error:", e);
     supabaseClient = null;
     renderSupabaseStatus();
+  }
+}
+
+function handleSupabaseMessageChange(payload) {
+  if (payload.eventType === 'INSERT') {
+    const newMsg = payload.new;
+    if (!appState.supportMessages.some(m => m.id === newMsg.id)) {
+      appState.supportMessages.push(newMsg);
+      saveSupportMessages();
+
+      const localSid = localStorage.getItem('nexus_chat_session_id');
+      if (newMsg.session_id === localSid && newMsg.sender === 'admin') {
+        appendChatBubble(newMsg.message, 'bot');
+        showToast("New reply from Store Admin!", "success");
+      } else if (newMsg.sender === 'customer') {
+        const inboxPane = document.getElementById('adminPaneInbox');
+        if (inboxPane && inboxPane.classList.contains('active')) {
+          renderAdminInbox();
+        }
+        showToast(`New message from ${newMsg.customer_name || 'Visitor'}!`, "info");
+      }
+    }
+  } else if (payload.eventType === 'UPDATE') {
+    const updated = payload.new;
+    const idx = appState.supportMessages.findIndex(m => m.id === updated.id);
+    if (idx !== -1) {
+      appState.supportMessages[idx] = updated;
+      saveSupportMessages();
+      renderAdminInbox();
+    }
+  } else if (payload.eventType === 'DELETE') {
+    const deletedId = payload.old.id;
+    appState.supportMessages = appState.supportMessages.filter(m => m.id !== deletedId);
+    saveSupportMessages();
+    renderAdminInbox();
   }
 }
 
@@ -3430,7 +3824,7 @@ function copySupabaseSql() {
 }
 
 function switchAdminMainTab(tab) {
-  const tabs = ['inventory', 'banners', 'access'];
+  const tabs = ['inventory', 'banners', 'inbox', 'access'];
   tabs.forEach(t => {
     const btn = document.getElementById(`tabBtnAdmin${t.charAt(0).toUpperCase() + t.slice(1)}`);
     const pane = document.getElementById(`adminPane${t.charAt(0).toUpperCase() + t.slice(1)}`);
@@ -3439,6 +3833,7 @@ function switchAdminMainTab(tab) {
   });
   if (tab === 'inventory') renderAdminInventory();
   if (tab === 'banners') renderAdminBannersList();
+  if (tab === 'inbox') renderAdminInbox();
   if (tab === 'access') renderSecondaryAdminsList();
   initLucide();
 }
